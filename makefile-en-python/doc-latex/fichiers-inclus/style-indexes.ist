@@ -1,0 +1,19 @@
+%!TEX encoding = UTF-8 Unicode
+
+% Styles pour makeIndex
+% Voir http://linux.die.net/man/1/makeindex
+
+% Cette commande ordonne le regroupement par lettres
+headings_flag 1
+
+%--- Chaque en-tête est précédée et suivie d'un tiret
+heading_prefix "{\\bfseries\\hfil - "
+heading_suffix " - \\hfil}\\nopagebreak\n"
+
+%--- Titre précédant le groupes des entrées constitués de nombres
+numhead_positive "Nombres"
+
+
+%--- Titre précédant le groupes des entrées commençant par un chiffre
+symhead_positive "1 à 7"
+
