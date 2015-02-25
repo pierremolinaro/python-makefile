@@ -18,6 +18,7 @@ for source in sourceList:
   depObject = object + ".dep"
   objectList.append (object)
   rule = makefile.Rule (object, "Compiling " + source)
+  rule.deleteTargetDirectoryOnClean ()
   rule.mDependences.append (source)
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
@@ -29,6 +30,8 @@ for source in sourceList:
 #--- Add linker rule
 product = "myRoutine"
 rule = makefile.Rule (product, "Linking " + product)
+rule.mOnErrorDeleteTarget = True
+rule.deleteTargetFileOnClean ()
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList

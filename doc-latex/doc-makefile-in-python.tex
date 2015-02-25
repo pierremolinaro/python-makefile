@@ -135,123 +135,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   E X T E N S I O N S    P O U R    P R É S E N T E R    L E S    T A B L E A U X                                     *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-\usepackage[table]{xcolor}
-
-\renewcommand{\arraystretch}{1.2}
-\newcommand\fondTableau{yellow!25}
-
-%------------------------------------------------------------------------------------------ RÉFÉRENCES À UN TABLEAU
-% La référence au tableau "nom-du-tableau" est définie par \labelTableau{nom-du-tableau}
-\newcommand\labelTableau[1]{\label{tab:#1}}
-% Latex autorise deux types d'appel à une référence \ref{tab:nom-du-tableau} et \pageref{tab:nom-du-tableau}
-
-% \refTableau{}{nom-du-tableau} ---> "tableau x.y"   où x.y est le n° du tableau
-\newcommand\refTableau[1]{\hyperref[tab:#1]{tableau \ref*{tab:#1}}}
-
-% \refTableauSansPrefixe{}{nom-du-tableau} ---> "x.y"   où x.y est le n° du tableau
-\newcommand\refTableauSansPrefixe[1]{\hyperref[tab:#1]{\ref*{tab:#1}}}
-
-% \refTableauPage{}{nom-du-tableau} ---> "tableau x.y page n"   où x.y est le n° du tableau
-\newcommand\refTableauPage[1]{\hyperref[tab:#1]{tableau \ref*{tab:#1} page \pageref{tab:#1}}}
-
-% \refTableauPageSansPrefixe{}{nom-du-tableau} ---> "x.y page n"   où x.y est le n° du tableau
-\newcommand\refTableauPageSansPrefixe[1]{\hyperref[tab:#1]{\ref*{tab:#1} page \pageref{tab:#1}}}
-
-%------------------------------------------------------------------------------------------ RÉFÉRENCES À UNE FIGURE
-% La référence au tableau "nom-de-la-figure" est définie par \labelFigure{nom-de-la-figure}
-\newcommand\labelFigure[1]{\label{fig:#1}}
-% Latex autorise deux types d'appel à une référence \ref{fig:nom-de-la-figure} et \pageref{fig:nom-de-la-figure}
-
-% \refFigure{}{nom-de-la-figure}   ---> "figure x.y"   où x.y est le n° de la figure
-% \refFigure{z}{nom-de-la-figure}  ---> "figure x.y.z" où x.y est le n° de la figure
-\newcommand\refFigure[2]{\hyperref[fig:#2]{figure \ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}}}}
-
-% \refFigureSansPrefixe{}{nom-de-la-figure}   ---> "x.y"   où x.y est le n° de la figure
-% \refFigureSansPrefixe{z}{nom-de-la-figure}  ---> "x.y.z" où x.y est le n° de la figure
-\newcommand\refFigureSansPrefixe[2]{\hyperref[fig:#2]{\ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}}}}
-
-% \refFigurePage{}{nom-de-la-figure}   ---> "figure x.y page n"   où x.y est le n° de la figure
-% \refFigurePage{z}{nom-de-la-figure}  ---> "figure x.y.z page n" où x.y est le n° de la figure
-\newcommand\refFigurePage[2]{\hyperref[fig:#2]{figure \ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}} page \pageref{fig:#2}}}
-
-% \refFigurePageSansPrefixe{}{nom-de-la-figure}   ---> "x.y page n"   où x.y est le n° de la figure
-% \refFigurePageSansPrefixe{z}{nom-de-la-figure}  ---> "x.y.z page n" où x.y est le n° de la figure
-\newcommand\refFigurePageSansPrefixe[2]{\hyperref[fig:#2]{\ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}} page \pageref{fig:#2}}}
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   T I K Z    -    P G F                                                                                               *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-\usepackage{tikz}              %--- Pour dessiner des figures
-\usepackage{pgfplots}
-\usetikzlibrary{decorations}
-\usetikzlibrary{decorations.pathmorphing}
-\usetikzlibrary{arrows}        %--- Bibliothèques de tracés de flèches
-\usepgflibrary{shapes.arrows}    %--- Flèches dessinées par contour 
-\usetikzlibrary{automata}      %--- Bibliothèque de tracés d'automates
-\usetikzlibrary{positioning}    %--- Placements de noeuds relativement les uns aux autres
-\usetikzlibrary{shadows.blur}    %--- Pour l'ombrage flouté des formes fermées
-\usepackage{tikzpfeile}        %--- Pour des tracés de flèches complexes
-\usepackage{schemabloc}        %--- Pour construire des fonctions de transfert
-\usepackage{tikz-cd}        %--- Pour construire des diagrammes fléchés simples
-\usepackage{tikz-timing}      %--- Pour construire des chronogrammes
-\usetikztiminglibrary{counters}
-\usepackage{tkz-base}        %--- Pour le tracé de système d'axes, de grilles
-\usepackage{tkz-fct}        %--- Pour le tracé de fonctions (x,y)
-\usepackage{tkz-euclide}      %--- Macros de base de construction de formes géométriques 2D
-\usetkzobj{polygons}        %--- Macros de construction des polygones de tkz-euclide
-\usetkzobj{circles}          %--- Macros de construction des cercles de tkz-euclide
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   G E S T I O N    D E    L ' I N D E X                                                                               *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-% http://www.cuk.ch/articles/4097
-% http://www.tuteurs.ens.fr/logiciels/latex/makeindex.html
-% http://linux.die.net/man/1/makeindex
-%
-% Attention ! Les deux commandes suivantes, ainsi que le \printindex placé plus bas ne
-% sont pas suffisants pour construire l'index : il faut utiliser l'utilitaire "makeIndex"
-% Voir le fichier de commande "build.command"
-\usepackage{makeidx}
-\makeindex
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   T O C B I D I N D                                                                                                   *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-%    Pour faire figurer la liste des tableaux (et la table des matières)
-%    dans la table des matières
-\usepackage{tocbibind}
-
-\setcounter{tocdepth}{3}
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   H Y P E R R E F                                                                                                     *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-%--- Pour les hyperliens, et le contrôle de la génération PDF 
-\usepackage{hyperref}
-\hypersetup{colorlinks=true}
-\hypersetup{linkcolor=blue}
-
-\hypersetup{breaklinks=true}
-%\hypersetup{verbose=true}
+\usepackage{xcolor}
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
@@ -278,7 +162,6 @@
 %   D É B U T    D U    D O C U M E N T                                                                                 *
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
-
 
 \begin{document} 
 
@@ -451,7 +334,7 @@ Les trois règles que nous avons définies s'affichent :
 \textcolor{blue}{\bf{-}{-}{-} End of print rule {-}{-}{-}}
 }
 
-~\\Nous allons maintenant définir les buts (« \emph{goals} »). Il faut en définir au moins un. Ici, nous allons en définir deux :
+~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet. Dans le cadre de notre exemple, nous allons définir deux buts :
 \begin{itemize}
   \item \texttt{all}, qui commande la construction de l'exécutable ;
   \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens.
@@ -691,6 +574,48 @@ L'exécution du script affiche maintenant:
 \textcolor{blue}{Linking myRoutine}\\
 \textcolor{blue}{Stripping myRoutine}
 }
+
+
+
+
+
+
+
+\section{Suppression des cibles en cas d'erreur}
+
+En cas d'erreur d'exécution d'une commande (par exemple due à une erreur de compilation), le fichier exécutable, si il existe, n'est pas supprimé : on a alors un exécutable qui ne correspond pas à l'état de compilation du programme.
+
+Il est très simple d'ordonner la suppression de l'exécutable lors d'une erreur d'exécution d'une commande. Il suffit de mettre l'attribut \texttt{mOnErrorDeleteTarget} de la règle qui définit l'édition de liens à \texttt{True} :
+\begin{lstlisting}[language=py]
+rule.mOnErrorDeleteTarget = True
+\end{lstlisting}
+Cette technique peut être utilisée pour toute cible.
+
+~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule (product, "Linking " + product)
+rule.mOnErrorDeleteTarget = True
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
+postCommand.mCommand.append (product)
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+
+
+
+
+
+
+\section{Le but \texttt{clean}}
+
+Par défaut, le but \texttt{clean} est défini mais n'a aucun effet. 
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %   F I N    D U    D O C U M E N T                                                                                     *
