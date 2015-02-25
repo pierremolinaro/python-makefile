@@ -1,0 +1,645 @@
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper,12pt,obeyspaces,openany]{extarticle}
+% L'option 'openany' permet de démarrer un chapitre sur une page paire
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   R É G L A G E S    « F R A N Ç A I S »                                                                              *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Paquetage pour le codage des sources en UTF-8
+\usepackage[utf8]{inputenc}
+
+%--- Latex demande ce paquetage pour mieux afficher le caractère "°" et \textquotesingle "'"
+\usepackage{textcomp}
+
+%--- Ce paquetage permet d'effectuer certaines césures, et ainsi d'éviter les messages "Overfull \hbox"
+\usepackage[T1]{fontenc}
+
+\usepackage{lmodern}
+
+%--- Paquetage pour imposer les réglages français
+\usepackage[frenchb]{babel}
+
+%------------------------------------------------------------------------------------------------
+%   C H O I X    D E    L A    P O L I C E
+%------------------------------------------------------------------------------------------------
+
+\usepackage[scaled=0.9, default]{sourcecodepro}
+%\usepackage{fouriernc}
+\usepackage[default]{sourcesanspro}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   M I S E    E N    P A G E                                                                                           *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+% Voir "Une courte introduction à Latex2e", § 6.4
+
+%--- Marge gauche : 2,54 cm ; le paramètre \hoffset contient cette valeur, moins 1 pouce
+%    \hoffset = 2,54 cm - 2,54 cm = 0 cm
+\setlength{\hoffset}{0.cm}
+
+%--- Marges supplémentaires, différenciées pour les pages gauches et droites ; ici, aucune.
+\setlength{\oddsidemargin }{0 cm}
+\setlength{\evensidemargin}{0 cm}
+
+%--- Largeur du texte
+%    \textwidth = 210 mm - 25.4 mm - 25.4 mm = 15,4 cm
+\setlength{\textwidth}{15.92 cm}
+
+%--- Marge haute : 2,54 cm ; le paramètre \voffset contient cette valeur, moins 1 pouce
+%    \voffset = 2,54 cm - 2,54 cm = 0 cm
+\setlength{\voffset}{0 cm}
+
+%--- Distance entre la marge haute et l'en-tête : 0 cm
+\setlength{\topmargin}{0 cm}
+
+%--- Hauteur de l'en-tête de chaque page : 1 cm
+\setlength{\headheight}{1 cm}
+
+%--- Distance entre l'en-tête de chaque page et le corps : 0,5 cm
+\setlength{\headsep}{0.5 cm}
+
+%--- Hauteur du corps
+%    \textheight = 29,7 cm - 2,54 cm - 2,8 cm - 1,5 cm = 22,6 cm
+\setlength{\textheight}{22.86 cm}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   E X T E N S I O N S    P O U R    L ' É C R I T U R E    D E S     F O R M U L E S    M A T H É M A T I Q U E S     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Extensions pour l'écriture des formules mathématiques
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+%--- Paquetage "IEEEtrantools"
+% Pour créer des tableaux d'équations, bien alignées
+% Voir courte-intro-latex.pdf, page §3.5.2 page 83
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   P A Q U E T A G E    « I F T H E N »                                                                                *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Ce paquetage permet d'effectuer des tests : \ifthenelse{test}{bloc then}{bloc else}
+\usepackage{ifthen}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   P A Q U E T A G E    « L I S T I N G S »                                                                            *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{red},
+  stringstyle=\color{orange},
+  frame=l,
+  backgroundcolor=\color{green!20},
+  numberstyle=\ttfamily\small,
+  xleftmargin=20pt
+}
+
+%--- Édition de liens
+\lstdefinelanguage{py}{
+  style=py,
+  comment=[l]{\%},
+}
+
+\lstdefinestyle{py}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{orange!25},
+  numberstyle=\ttfamily\small,
+  xleftmargin=15pt,
+  frame=tl
+}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   E N - T Ê T E S    E T    P I E D S    D E    P A G E S                                                             *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   E X T E N S I O N S    P O U R    P R É S E N T E R    L E S    T A B L E A U X                                     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage[table]{xcolor}
+
+\renewcommand{\arraystretch}{1.2}
+\newcommand\fondTableau{yellow!25}
+
+%------------------------------------------------------------------------------------------ RÉFÉRENCES À UN TABLEAU
+% La référence au tableau "nom-du-tableau" est définie par \labelTableau{nom-du-tableau}
+\newcommand\labelTableau[1]{\label{tab:#1}}
+% Latex autorise deux types d'appel à une référence \ref{tab:nom-du-tableau} et \pageref{tab:nom-du-tableau}
+
+% \refTableau{}{nom-du-tableau} ---> "tableau x.y"   où x.y est le n° du tableau
+\newcommand\refTableau[1]{\hyperref[tab:#1]{tableau \ref*{tab:#1}}}
+
+% \refTableauSansPrefixe{}{nom-du-tableau} ---> "x.y"   où x.y est le n° du tableau
+\newcommand\refTableauSansPrefixe[1]{\hyperref[tab:#1]{\ref*{tab:#1}}}
+
+% \refTableauPage{}{nom-du-tableau} ---> "tableau x.y page n"   où x.y est le n° du tableau
+\newcommand\refTableauPage[1]{\hyperref[tab:#1]{tableau \ref*{tab:#1} page \pageref{tab:#1}}}
+
+% \refTableauPageSansPrefixe{}{nom-du-tableau} ---> "x.y page n"   où x.y est le n° du tableau
+\newcommand\refTableauPageSansPrefixe[1]{\hyperref[tab:#1]{\ref*{tab:#1} page \pageref{tab:#1}}}
+
+%------------------------------------------------------------------------------------------ RÉFÉRENCES À UNE FIGURE
+% La référence au tableau "nom-de-la-figure" est définie par \labelFigure{nom-de-la-figure}
+\newcommand\labelFigure[1]{\label{fig:#1}}
+% Latex autorise deux types d'appel à une référence \ref{fig:nom-de-la-figure} et \pageref{fig:nom-de-la-figure}
+
+% \refFigure{}{nom-de-la-figure}   ---> "figure x.y"   où x.y est le n° de la figure
+% \refFigure{z}{nom-de-la-figure}  ---> "figure x.y.z" où x.y est le n° de la figure
+\newcommand\refFigure[2]{\hyperref[fig:#2]{figure \ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}}}}
+
+% \refFigureSansPrefixe{}{nom-de-la-figure}   ---> "x.y"   où x.y est le n° de la figure
+% \refFigureSansPrefixe{z}{nom-de-la-figure}  ---> "x.y.z" où x.y est le n° de la figure
+\newcommand\refFigureSansPrefixe[2]{\hyperref[fig:#2]{\ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}}}}
+
+% \refFigurePage{}{nom-de-la-figure}   ---> "figure x.y page n"   où x.y est le n° de la figure
+% \refFigurePage{z}{nom-de-la-figure}  ---> "figure x.y.z page n" où x.y est le n° de la figure
+\newcommand\refFigurePage[2]{\hyperref[fig:#2]{figure \ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}} page \pageref{fig:#2}}}
+
+% \refFigurePageSansPrefixe{}{nom-de-la-figure}   ---> "x.y page n"   où x.y est le n° de la figure
+% \refFigurePageSansPrefixe{z}{nom-de-la-figure}  ---> "x.y.z page n" où x.y est le n° de la figure
+\newcommand\refFigurePageSansPrefixe[2]{\hyperref[fig:#2]{\ref*{fig:#2}{\ifthenelse{\equal{#1}{}}{}{.#1}} page \pageref{fig:#2}}}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   T I K Z    -    P G F                                                                                               *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage{tikz}              %--- Pour dessiner des figures
+\usepackage{pgfplots}
+\usetikzlibrary{decorations}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{arrows}        %--- Bibliothèques de tracés de flèches
+\usepgflibrary{shapes.arrows}    %--- Flèches dessinées par contour 
+\usetikzlibrary{automata}      %--- Bibliothèque de tracés d'automates
+\usetikzlibrary{positioning}    %--- Placements de noeuds relativement les uns aux autres
+\usetikzlibrary{shadows.blur}    %--- Pour l'ombrage flouté des formes fermées
+\usepackage{tikzpfeile}        %--- Pour des tracés de flèches complexes
+\usepackage{schemabloc}        %--- Pour construire des fonctions de transfert
+\usepackage{tikz-cd}        %--- Pour construire des diagrammes fléchés simples
+\usepackage{tikz-timing}      %--- Pour construire des chronogrammes
+\usetikztiminglibrary{counters}
+\usepackage{tkz-base}        %--- Pour le tracé de système d'axes, de grilles
+\usepackage{tkz-fct}        %--- Pour le tracé de fonctions (x,y)
+\usepackage{tkz-euclide}      %--- Macros de base de construction de formes géométriques 2D
+\usetkzobj{polygons}        %--- Macros de construction des polygones de tkz-euclide
+\usetkzobj{circles}          %--- Macros de construction des cercles de tkz-euclide
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   G E S T I O N    D E    L ' I N D E X                                                                               *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+% http://www.cuk.ch/articles/4097
+% http://www.tuteurs.ens.fr/logiciels/latex/makeindex.html
+% http://linux.die.net/man/1/makeindex
+%
+% Attention ! Les deux commandes suivantes, ainsi que le \printindex placé plus bas ne
+% sont pas suffisants pour construire l'index : il faut utiliser l'utilitaire "makeIndex"
+% Voir le fichier de commande "build.command"
+\usepackage{makeidx}
+\makeindex
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   T O C B I D I N D                                                                                                   *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%    Pour faire figurer la liste des tableaux (et la table des matières)
+%    dans la table des matières
+\usepackage{tocbibind}
+
+\setcounter{tocdepth}{3}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   H Y P E R R E F                                                                                                     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Pour les hyperliens, et le contrôle de la génération PDF 
+\usepackage{hyperref}
+\hypersetup{colorlinks=true}
+\hypersetup{linkcolor=blue}
+
+\hypersetup{breaklinks=true}
+%\hypersetup{verbose=true}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   T I T L E T O C                                                                                                     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Description dans le paquetage titlesec
+% http://forum.mathematex.net/latex-f6/formatage-avance-de-la-table-des-matieres-t11559.html
+
+\usepackage{titletoc}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   D P R O G R E S S                                                                                                   *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Affiche les sections dans le log
+%\usepackage{dprogress}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   D É B U T    D U    D O C U M E N T                                                                                 *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+
+\begin{document} 
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   P A G E    D E    T I T R E                                                                                         *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\title{\Huge{\textbf{Makefiles en Python}}}
+\author{Pierre Molinaro}
+\date \today 
+
+\maketitle
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   L E S    C H A P I T R E S                                                                                          *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\section{Introduction}
+
+La classe \texttt{makefile} permet de construire facilement des scripts Python qui ont toutes les facilités des fichiers \emph{makefile} exécutés par l'utilitaire \texttt{make}. Les avantages principaux de la classe \texttt{makefile} sont :
+\begin{itemize}
+  \item la description des règles de dépendances est beaucoup plus simple ;
+  \item les espaces dans un chemin sont pris en compte naturellement. 
+\end{itemize}
+
+Dans la suite, nous allons donner un exemple d'utilisation de cette classe.
+
+\section{L'exemple}
+
+L'exemple consiste en deux fichiers C et un fichier d'en-tête.
+
+Le fichier \texttt{main.c} :
+\lstinputlisting[language=C]{../main.c}
+
+
+Le fichier \texttt{myRoutine.h} :
+\lstinputlisting[language=C]{../myRoutine.h}
+
+
+Le fichier \texttt{myRoutine.c} :
+\lstinputlisting[language=C]{../myRoutine.c}
+
+La compilation séparée s'effectue par les commandes :
+
+\texttt{mkdir -p objects}
+
+\texttt{gcc -c main.c -o objects/main.c.o}
+
+\texttt{gcc -c myRoutine.c -o objects/myRoutine.c.o}
+
+\texttt{gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine}
+
+
+Les fichiers objets sont rangés dans un répertoire \texttt{objects}, qu'il faut créer si il n'existe pas.
+
+
+\section{Construction du script Python}
+
+Ce script est contenu dans un fichier exécutable \texttt{build.py}, situé dans le même répertoire que les fichiers sources C. Sa composition est décrite pas-à-pas.
+
+~\\La première opération est d'importer le module \texttt{makefile}, ainsi que les autres modules utiles.
+\begin{lstlisting}[language=py]
+import sys, os, makefile
+\end{lstlisting}
+
+~\\Pour pouvoir travailler avec des chemins relatifs, on fixe le répertoire courant, obtenu à partir de l'argument $0$.
+\begin{lstlisting}[language=py]
+scriptDir = os.path.dirname (os.path.abspath (sys.argv[0]))
+os.chdir (scriptDir)
+\end{lstlisting}
+
+~\\Ensuite, on crée un objet \texttt{make}, qui est l'objet qui centralise la mise en œuvre de la construction.
+\begin{lstlisting}[language=py]
+make = makefile.Make ()
+\end{lstlisting}
+
+~\\Pour présenter une solution générale, on construit deux listes, l'une contenant la liste des fichiers C à compiler, l'autre la liste des fichiers objets à lier. La seconde est initialement vide, elle est construite au fur et à mesure en bouclant sur la liste des fichiers source. 
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  ...
+\end{lstlisting}
+
+~\\Dans le corps de la boucle on construit chaque règle correspondant à la compilation d'un fichier source. On commence par définir le fichier \emph{cible} de la règle, qui est ici le fichier objet construit par la compilation du source C. On en profite pour accumuler dans \texttt{objectList} la liste des fichiers objet.
+\begin{lstlisting}[language=py]
+  object = "objects/" + source + ".o"
+  objectList.append (object)
+\end{lstlisting}
+
+~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, le texte \texttt{Building} suivi de la cible est affiché. 
+\begin{lstlisting}[language=py]
+  rule = makefile.Rule (object, "Compiling " + source)
+\end{lstlisting}
+Attention, la cible (ici « \texttt{object} ») doit être obligatoirement un fichier. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
+
+~\\On ajoute ensuite les dépendances. Ici, il n'y a qu'une seule dépendance, le fichier source. D'une manière générale, \texttt{rule.mDependences} est une liste de chaînes de caractères, initialement vide.
+\begin{lstlisting}[language=py]
+  rule.mDependences.append (source)
+\end{lstlisting}
+Attention, ne pas ajouter ici les dépendances envers les fichiers d'en-tête. On verra comment en tenir compte par la suite.
+
+~\\On construit maintenant la commande qui sera exécutée pour construire la cible. \texttt{rule.mCommand} est une liste de chaînes de caractères, initialement vide.
+\begin{lstlisting}[language=py]
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+\end{lstlisting}
+Il est impératif de définir une chaîne par argument. Si par exemple on veut ajouter l'option « \texttt{-O2} », écrire \texttt{rule.mCommand.append ("gcc -O2")} est une erreur, il faut obligatoirement écrire \texttt{rule.mCommand += ["gcc", "-O2"]}.
+
+~\\La construction de la règle est terminée ; on peut maintenant l'ajouter au makefile.
+\begin{lstlisting}[language=py]
+  make.addRule (rule)
+\end{lstlisting}
+
+
+~\\On récapitule la construction des règles relatives à la compilation des sources C :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  object = "objects/" + source + ".o"
+  objectList.append (object)
+  rule = makefile.Rule (object, "Compiling " + source)
+  rule.mDependences.append (source)
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+  make.addRule (rule)
+\end{lstlisting}
+Remarquez que les fichiers objets sont rangés dans le répertoire \texttt{objects}. Or celui-ci n'existe peut-être pas, et \texttt{gcc} ne le créera pas, en déclenchant une erreur si il n'existe pas. En fait, il est inutile de s'en soucier. En effet, quand une règle doit être exécutée, notre makefile crée implicitement le répertoire du fichier cible, si ce répertoire n'existe pas.
+
+~\\On va maintenant construire la règle relative à l'édition des liens. Le nom du fichier exécutable est défini par la variable \texttt{product}, et les dépendances sont les fichiers objets dont la liste est définie par la variable \texttt{objectList}.
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule (product, "Linking " + product)
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+make.addRule (rule)
+\end{lstlisting}
+
+~\\À titre de vérification, il est possible d'afficher les règles.
+\begin{lstlisting}[language=py]
+make.printRules ()
+\end{lstlisting}
+
+Les trois règles que nous avons définies s'affichent :
+
+\noindent\texttt{\footnotesize
+\textcolor{blue}{\bf{-}{-}{-} Print 3 rules {-}{-}{-}}\\
+\textcolor{green}{\bf Target: "objects/main.c.o"}\\
+\hspace*{1.2em}Dependence: "main.c"\\
+\hspace*{1.2em}Command:  "gcc" "-c" "main.c" "-o" "objects/main.c.o"\\
+\hspace*{1.2em}Title: "Compiling main.c"\\
+\textcolor{green}{\bf Target: "objects/myRoutine.c.o"}\\
+\hspace*{1.2em}Dependence: "myRoutine.c"\\
+\hspace*{1.2em}Command:  "gcc" "-c" "myRoutine.c" "-o" "objects/myRoutine.c.o"\\
+\hspace*{1.2em}Title: "Compiling myRoutine.c"\\
+\textcolor{green}{\bf Target: "myRoutine"}\\
+\hspace*{1.2em}Dependence: "objects/main.c.o"\\
+\hspace*{1.2em}Dependence: "objects/myRoutine.c.o"\\
+\hspace*{1.2em}Command:  "gcc" "objects/main.c.o" "objects/myRoutine.c.o" "-o" "myRoutine"\\
+\hspace*{1.2em}Title: "Linking myRoutine"\\
+\textcolor{blue}{\bf{-}{-}{-} End of print rule {-}{-}{-}}
+}
+
+~\\Nous allons maintenant définir les buts (« \emph{goals} »). Il faut en définir au moins un. Ici, nous allons en définir deux :
+\begin{itemize}
+  \item \texttt{all}, qui commande la construction de l'exécutable ;
+  \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens.
+\end{itemize}
+
+\begin{lstlisting}[language=py]
+make.addGoal ("all", [product], "Building all")
+make.addGoal ("compile", objectList, "Compile C files")
+\end{lstlisting}
+Chaque but est défini par trois arguments :
+\begin{itemize}
+\item son nom, qui sert par la suite pour le désigner ;
+\item la liste des fichiers qu'il construit ;
+\item sa description, sous la forme d'une chaîne de caractères.
+\end{itemize}
+
+~\\À titre de vérification, nous pouvons afficher la liste des buts.
+\begin{lstlisting}[language=py]
+make.printGoals ()
+\end{lstlisting}
+
+On obtient :
+
+\noindent\texttt{\footnotesize
+\textcolor{blue}{\bf{-}{-}{-} Print 2 goals {-}{-}{-}}\\
+\textcolor{green}{\bf Goal: "compile"}\\
+\hspace*{1.2em}Target: "objects/main.c.o"\\
+\hspace*{1.2em}Target: "objects/myRoutine.c.o"\\
+\hspace*{1.2em}Message: "Compile C files"\\
+\textcolor{green}{\bf Goal: "all"}\\
+\hspace*{1.2em}Target: "myRoutine"\\
+\hspace*{1.2em}Message: "Building all"\\
+\textcolor{blue}{\bf{-}{-}{-} End of print goal {-}{-}{-}}
+}
+
+~\\Enfin, nous allons ordonner la construction du but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
+\begin{lstlisting}[language=py]
+make.runGoal ("all", 0, False)
+\end{lstlisting}
+Cet appel contient trois arguments :
+\begin{itemize}
+\item le nom du but à construire, qui doit être l'un des buts précédemment définis ;
+\item une valeur entière qui précise combien de règles peuvent être exécutées en parallèle ;
+  \begin{itemize}
+  \item une valeur strictement positive définit le nombre de règles qui peuvent être exécutées en parallèle ; en particulier, la valeur $1$ impose une exécution séquentielle des règles ;
+  \item la valeur $0$ indique au makefile de prendre le nombre de processeurs de la machine sur laquelle tourne le script ;
+  \item la valeur strictement négative indique au makefile de prendre le nombre de processeurs de la machine sur laquelle tourne le script, auquel on ajoute l'opposé de la valeur ; par exemple, $-2$ sur un quadri-cœur définit l'exécution de $4-(-2)=6$ règles en parallèle ;
+  \end{itemize}
+\item une valeur booléenne qui indique si la commande relative à chaque règle doit être affichée ou non ; le titre de chaque règle est toujours affiché.
+\end{itemize}
+
+L'exécution du script affiche (noter la création du répertoire \texttt{objects}) :
+
+\noindent\texttt{\footnotesize
+\textcolor{blue}{Making "objects" directory}\\
+\textcolor{blue}{Compiling main.c}\\
+\textcolor{blue}{Compiling myRoutine.c}\\
+\textcolor{blue}{Linking myRoutine}
+}
+
+~\\Si on relance aussitôt le script, le makefile examine les dépendances et signale qu'il n'y a rien à construire :
+
+\noindent\texttt{\footnotesize
+\textcolor{blue}{Nothing to make.}
+}
+
+
+
+~\\Appeler \texttt{runGoal} avec le dernier argument à \texttt{True} permet d'afficher les commandes qui exécutées :
+
+\noindent\texttt{\footnotesize
+\textcolor{blue}{Making "objects" directory}\\
+mkdir -p objects\\
+\textcolor{blue}{Compiling main.c}\\
+gcc -c main.c -o objects/main.c.o\\
+\textcolor{blue}{Compiling myRoutine.c}\\
+gcc -c myRoutine.c -o objects/myRoutine.c.o\\
+\textcolor{blue}{Linking myRoutine}\\
+gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
+}
+
+~\\Si une erreur est détectée, par exemple si l'exécution d'une règle échoue par suite d'une erreur de compilation, l'exécution de \texttt{ruleGoal} attend la fin de toutes les exécutions parallèles pour terminer. Pour afficher les erreurs et abandonner l'exécution du script en retournant un code d'erreur, on peut appeler :
+\begin{lstlisting}[language=py]
+make.printErrorCountAndExitOnError ()
+\end{lstlisting}
+L'appel de cette méthode n'a aucun effet si il n'y a pas d'erreur.
+
+\section{Dépendance des fichiers d'en-tête}
+
+
+Dans les écritures précédentes, nous n'avions pas pris en compte les dépendances envers les fichiers d'en-tête pour la compilation des sources C. Dans l'exemple, ces dépendances sont très simples, il n'y a qu'un seul fichier d'en-tête utilisateur : \texttt{myRoutine.h}. On pourrait ajouter ce fichier dans la liste de dépendances définie par \texttt{rule.mDependences}.
+
+Mais dans un cas réel, cela impose de maintenir soi-même la liste des dépendances de chaque fichier source. Or, en fonction de l'évolution du programme, cette liste peut évoluer : des fichiers d'en-tête peuvent s'avérer inutiles, d'autres peuvent être oubliés. Il est donc beaucoup plus simple et plus sûr de confier cette tâche à GCC et au makefile Python.
+
+Maintenir automatiquement les dépendances envers les fichiers d'en-tête s'effectue en trois étapes.
+
+D'abord nommer le fichier de fichier de dépendance : on choisit le nom du fichier objet, auquel on ajoute l'extension \texttt{dep}. Ce fichier sera placé dans le répertoire \texttt{objects}.
+\begin{lstlisting}[language=py]
+  depObject = object + ".dep"
+\end{lstlisting}
+
+Ensuite, indiquer à GCC de le construire ; on ajoute les options de compilations suivantes :
+\begin{lstlisting}[language=py]
+  rule.mCommand += ["-MD", "-MP", "-MF", depObject]
+\end{lstlisting}
+
+Enfin, on ajoute à la règle la dépendance en ce fichier :
+\begin{lstlisting}[language=py]
+  rule.enterSecondaryDependanceFile (depObject)
+\end{lstlisting}
+
+
+~\\Les règles de compilation des sources C deviennent donc :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  object = "objects/" + source + ".o"
+  depObject = object + ".dep"
+  objectList.append (object)
+  rule = makefile.Rule (object, "Compiling " + source)
+  rule.mDependences.append (source)
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+  rule.mCommand += ["-MD", "-MP", "-MF", depObject]
+  rule.enterSecondaryDependanceFile (depObject)
+  make.addRule (rule)
+\end{lstlisting}
+
+Maintenant, toute modification d'un fichier d'en-tête provoquera la compilation des fichiers sources qui l'inclut directement ou indirectement.
+
+
+
+
+
+
+
+\section{Priorité entre les règles}
+
+Par défaut, les règles qui sont prêtes à être exécutées le sont dans leur ordre d'ajout par la méthode \texttt{addRule}. Ainsi, dans notre exemple, on a définit la liste des fichiers sources par :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+\end{lstlisting}
+Si on exécute les règles séquentiellement (appel de \texttt{runGoal} avec le deuxième argument égal à $1$), \texttt{main.c} sera toujours compilé avant \texttt{myRoutine.c}.
+
+On peut changer cet ordre en affectant une priorité à une règle : il suffit de changer la valeur du champ entier \texttt{mPriority} de la règle. Par défaut, ce champ est à zéro. On peut affecter une valeur positive, négative ou nulle, du moment qu'elle est entière. Plus ce champ a une valeur importante, plus la règle est prioritaire. À priorité égale, c'est l'ordre d'insertion des règles (par la méthode \texttt{addRule}) qui définit l'ordre : la première insérée sera exécutée d'abord.
+
+Par exemple, on peut demander à compiler les fichiers dans l'ordre décroissant de leur taille. Pour cela on écrira (juste avant l'appel de \texttt{addRule}) :
+\begin{lstlisting}[language=py]
+  rule.mPriority = os.path.getsize (scriptDir + "/" + source)
+\end{lstlisting}
+
+
+
+
+
+
+
+\section{Prise en compte de plusieurs buts}
+
+Nous avons défini le but \texttt{compile}, mais l'avoir appelé jusqu'à présent. Nous allons voir comment nous pouvons écrire un nouveau script Python qui va appeler ce but.
+
+D'abord, nous modifions la fin du script \texttt{build.py} de la façon suivante :
+\begin{lstlisting}[language=py]
+#--- Get goal as first argument
+goal = "all"
+if len (sys.argv) > 1 :
+  goal = sys.argv [1]
+#--- Get max parallel jobs as second argument
+maxParallelJobs = 0 # 0 means use host processor count
+if len (sys.argv) > 2 :
+  maxParallelJobs = int (sys.argv [2])
+make.runGoal (goal, maxParallelJobs, maxParallelJobs == 1)
+\end{lstlisting}
+
+Cette modification permet d'appeler ce script avec différents arguments, ce qui permet de préciser le but et le parallélisme.
+
+Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilation, s'écrit :
+\lstinputlisting[language=py]{../compile.py}
+
+
+Autre exemple : le script \texttt{verbose-build.py} effectue une compilation fichier par fichier, ce qui clarifie l'affichage des erreurs, en effet, la compilation parallèle peut provoquer l'affichage entrelacé des messages d'erreurs, les rendant difficilement compréhensibles.
+\lstinputlisting[language=py]{../verbose-build.py}
+
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%   F I N    D U    D O C U M E N T                                                                                     *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\end{document}
