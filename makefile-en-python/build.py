@@ -33,6 +33,10 @@ rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
 rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
+postCommand.mCommand.append (product)
+rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 #--- Print rules
 #make.printRules ()

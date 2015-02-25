@@ -302,7 +302,7 @@
 
 \section{Introduction}
 
-La classe \texttt{makefile} permet de construire facilement des scripts Python qui ont toutes les facilités des fichiers \emph{makefile} exécutés par l'utilitaire \texttt{make}. Les avantages principaux de la classe \texttt{makefile} sont :
+Le module \texttt{makefile} permet de construire facilement des scripts Python qui ont toutes les facilités des fichiers \emph{makefile} exécutés par l'utilitaire \texttt{make}. Les avantages principaux de la classe \texttt{makefile} sont :
 \begin{itemize}
   \item la description des règles de dépendances est beaucoup plus simple ;
   \item les espaces dans un chemin sont pris en compte naturellement. 
@@ -367,7 +367,7 @@ for source in sourceList:
   ...
 \end{lstlisting}
 
-~\\Dans le corps de la boucle on construit chaque règle correspondant à la compilation d'un fichier source. On commence par définir le fichier \emph{cible} de la règle, qui est ici le fichier objet construit par la compilation du source C. On en profite pour accumuler dans \texttt{objectList} la liste des fichiers objet.
+~\\Dans le corps de la boucle, on construit chaque règle correspondant à la compilation d'un fichier source. On commence par définir le fichier \emph{cible} de la règle, qui est ici le fichier objet construit par la compilation du source C. On en profite pour accumuler dans \texttt{objectList} la liste des fichiers objet.
 \begin{lstlisting}[language=py]
   object = "objects/" + source + ".o"
   objectList.append (object)
@@ -399,7 +399,7 @@ Il est impératif de définir une chaîne par argument. Si par exemple on veut a
 \end{lstlisting}
 
 
-~\\On récapitule la construction des règles relatives à la compilation des sources C :
+~\\{\bf Récapitulation.} La construction des règles relatives à la compilation des sources C est :
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -564,7 +564,7 @@ Enfin, on ajoute à la règle la dépendance en ce fichier :
 \end{lstlisting}
 
 
-~\\Les règles de compilation des sources C deviennent donc :
+~\\{\bf Récapitulation.} Les règles de compilation des sources C deviennent donc :
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -637,6 +637,60 @@ Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilati
 Autre exemple : le script \texttt{verbose-build.py} effectue une compilation fichier par fichier, ce qui clarifie l'affichage des erreurs, en effet, la compilation parallèle peut provoquer l'affichage entrelacé des messages d'erreurs, les rendant difficilement compréhensibles.
 \lstinputlisting[language=py]{../verbose-build.py}
 
+
+
+
+
+
+
+\section{Post commandes}
+
+Il est possible d'ajouter à une règle des \emph{post commandes} qui sont exécutées les unes après les autres à la suite l'exécution de la commande associée. Un exemple typique est l'application de l'utilitaire \texttt{strip} sur l'exécutable produit par le linker.
+
+On ne peut pas écrire une règle ordinaire, car le fichier de dépendance est le même que le fichier cible.
+
+~\\Pour définir une \emph{post commande}, on commance par instancier un nouvel objet de type \texttt{PostCommand} :
+\begin{lstlisting}[language=py]
+postCommand = makefile.PostCommand ("Stripping " + product)
+\end{lstlisting}
+En argument, figure le titre qui sera affiché lors de l'exécution de la post commande.
+
+~\\On ajoute ensuite la commande qui doit être exécutée :
+\begin{lstlisting}[language=py]
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
+postCommand.mCommand.append (product)
+\end{lstlisting}
+
+~\\Enfin, on ajoute la \emph{post commande} à la liste des post commandes de la règle :
+\begin{lstlisting}[language=py]
+rule.mPostCommands.append (postCommand)
+\end{lstlisting}
+
+
+~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule (product, "Linking " + product)
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
+postCommand.mCommand.append (product)
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+L'exécution du script affiche maintenant:
+
+\noindent\texttt{\footnotesize
+\textcolor{blue}{Making "objects" directory}\\
+\textcolor{blue}{Compiling main.c}\\
+\textcolor{blue}{Compiling myRoutine.c}\\
+\textcolor{blue}{Linking myRoutine}\\
+\textcolor{blue}{Stripping myRoutine}
+}
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %   F I N    D U    D O C U M E N T                                                                                     *
