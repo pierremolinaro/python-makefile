@@ -643,9 +643,11 @@ class Make:
         elif rule.mCleanOperation == 2: # Delete target directories
           directoriesToRemoveSet.add (os.path.dirname (rule.mTarget))
       for dir in directoriesToRemoveSet:
-        runCommand (["rm", "-fr", dir], "Removing \"" + dir + "\"", showCommand)
+        if os.path.exists (os.path.abspath (dir)):
+          runCommand (["rm", "-fr", dir], "Removing \"" + dir + "\"", showCommand)
       for file in filesToRemoveList:
-        runCommand (["rm", "-f", file], "Deleting \"" + file + "\"", showCommand)
+        if os.path.exists (os.path.abspath (file)):
+          runCommand (["rm", "-f", file], "Deleting \"" + file + "\"", showCommand)
     else:
       errorMessage = "The '" + goal + "' goal is not defined; defined goals:"
       for key in self.mGoals:
