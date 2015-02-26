@@ -256,7 +256,7 @@ for source in sourceList:
   objectList.append (object)
 \end{lstlisting}
 
-~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, le texte \texttt{Building} suivi de la cible est affiché. 
+~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, le texte \texttt{Building} suivi du nom de la cible est affiché. 
 \begin{lstlisting}[language=py]
   rule = makefile.Rule (object, "Compiling " + source)
 \end{lstlisting}
@@ -465,7 +465,7 @@ for source in sourceList:
   make.addRule (rule)
 \end{lstlisting}
 
-Maintenant, toute modification d'un fichier d'en-tête provoquera la compilation des fichiers sources qui l'inclut directement ou indirectement.
+Maintenant, toute modification d'un fichier d'en-tête provoquera la compilation des fichiers sources qui l'inclut directement ou indirectement. C'est une dépendance dite \emph{secondaire} car l'absence du fichier n'empêche pas l'exécution de la règle. A contrario, l'absence du fichier source entraîne une erreur, car il n'y a aucun moyen de le construire.
 
 
 
@@ -513,11 +513,11 @@ make.runGoal (goal, maxParallelJobs, maxParallelJobs == 1)
 
 Cette modification permet d'appeler ce script avec différents arguments, ce qui permet de préciser le but et le parallélisme.
 
-Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilation, s'écrit :
+~\\Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilation, s'écrit :
 \lstinputlisting[language=py]{../compile.py}
 
 
-Autre exemple : le script \texttt{verbose-build.py} effectue une compilation fichier par fichier, ce qui clarifie l'affichage des erreurs, en effet, la compilation parallèle peut provoquer l'affichage entrelacé des messages d'erreurs, les rendant difficilement compréhensibles.
+~\\Autre exemple : le script \texttt{verbose-build.py} effectue une compilation fichier par fichier, ce qui clarifie l'affichage des erreurs, en effet, la compilation parallèle peut provoquer l'affichage entrelacé des messages d'erreurs, les rendant difficilement compréhensibles.
 \lstinputlisting[language=py]{../verbose-build.py}
 
 
@@ -676,6 +676,78 @@ for source in sourceList:
 
 ~\\Il suffit maintenant d'ajouter le script \texttt{clean.py}, qui appelle le but \texttt{clean} :
 \lstinputlisting[language=py]{../clean.py}
+
+
+\section{Le script complet \texttt{build.py}}
+
+\lstinputlisting[language=py]{../build.py}
+
+
+
+
+
+
+
+\section{Autres fonctions}
+
+\subsection{Impression en couleur}
+
+Le module \texttt{makefile} définit les fonctions suivantes qui permettent d'effectuer des impressions en couleur :
+\begin{itemize}
+  \item \texttt{BLACK()}, \texttt{RED()}, \texttt{GREEN()}, \texttt{YELLOW()}, \texttt{BLUE()}, \texttt{MAGENTA()}, \texttt{CYAN()}, \texttt{WHITE()};
+  \item \texttt{BOLD()}, \texttt{BLINK()}, \texttt{UNDERLINE()} ;
+  \item \texttt{ENDC()}, qui remet à zéro les attributs d'impression.
+\end{itemize}
+Toutes ces fonctions retournent une chaîne de caractères que l'on peut directement utiliser dans un \texttt{print} :
+\begin{lstlisting}[language=py]
+print makefile.RED () + makefile.BOLD () + "Erreur !" + makefile.ENDC ()
+\end{lstlisting}
+
+
+\subsection{La méthode \texttt{enterError}}
+
+La méthode \texttt{enterError} de la classe \texttt{Make} permet d'afficher un message d'erreur et d'incrémenter le compteur d'erreurs maintenu par le récepteur. Elle présente un argument chaîne de caractères, qui est imprimé en rouge et en gras sur le terminal.
+\begin{lstlisting}[language=py]
+make.enterError ("il y a une erreur quelque part !")
+\end{lstlisting}
+Rappelons qu'un compteur d'erreur non nul inhibe l'exécution des règles lorsque \texttt{runGoal} est invoqué.
+
+
+\subsection{La méthode \texttt{errorCount}}
+
+La méthode \texttt{errorCount} de la classe \texttt{Make} retourne la valeur courante du compteur d'erreurs maintenu par le récepteur.
+\begin{lstlisting}[language=py]
+nombre_erreurs = make.errorCount ()
+\end{lstlisting}
+
+
+\subsection{La méthode \texttt{printErrorCount}}
+
+La méthode \texttt{printErrorCount} de la classe \texttt{Make} imprime la valeur courante du compteur d'erreurs maintenu par le récepteur si celle-ci est non nulle. Si elle est nulle, rien n'est imprimé.
+\begin{lstlisting}[language=py]
+make.printErrorCount ()
+\end{lstlisting}
+
+
+\subsection{Recherche d'un fichier dans une arborescence}
+
+La méthode \texttt{searchFileInDirectories} de la classe \texttt{Make} recherche un fichier dans une liste de répertoires :
+\begin{lstlisting}[language=py]
+chemin = make.searchFileInDirectories (fichier, liste_de_repertoires)
+\end{lstlisting}
+Où :
+\begin{itemize}
+  \item \texttt{fichier} est une chaîne de caractères qui définit le nom du fichier recherché ;
+  \item \texttt{liste\_de\_repertoires} est une liste de chaînes de caractères qui définit la liste des répertoires dans lesquels le fichier sera recherché ;
+\end{itemize}
+La fonction retourne :
+\begin{itemize}
+  \item si \texttt{fichier} est trouvé exactement une fois, le nom du fichier préfixé par le nom du répertoire qui contient le fichier ;
+  \item la chaîne vide si le fichier n'est pas trouvé, ou si il est trouvé plusieurs fois ; un message d'erreur est alors affiché, et le compteur d'erreur maintenu par le récepteur est incrémenté.
+\end{itemize}
+
+Rappelons qu'un compteur d'erreur non nul inhibe l'exécution des règles lorsque \texttt{runGoal} est invoqué.
+
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %   F I N    D U    D O C U M E N T                                                                                     *

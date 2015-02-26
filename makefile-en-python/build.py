@@ -13,7 +13,7 @@ make = makefile.Make ()
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
 for source in sourceList:
-#--- Compile
+#--- Add compile rules
   object = "objects/" + source + ".o"
   depObject = object + ".dep"
   objectList.append (object)

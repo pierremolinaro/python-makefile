@@ -1,17 +1,11 @@
 #! /usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-#-------------------------------------------------------------------*
-
 import sys, os, subprocess, atexit
-
-#-------------------------------------------------------------------*
 
 def cleanup():
   if childProcess.poll () == None :
     childProcess.kill ()
-
-#-------------------------------------------------------------------*
 
 #--- Register a function for killing subprocess
 atexit.register (cleanup)
@@ -25,5 +19,3 @@ if childProcess.poll () == None :
   childProcess.wait ()
 if childProcess.returncode != 0 :
   sys.exit (childProcess.returncode)
-
-#-------------------------------------------------------------------*
