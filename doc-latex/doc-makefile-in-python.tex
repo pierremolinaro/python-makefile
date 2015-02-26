@@ -615,7 +615,67 @@ make.addRule (rule)
 
 \section{Le but \texttt{clean}}
 
-Par défaut, le but \texttt{clean} est défini mais n'a aucun effet. 
+Par défaut, le but \texttt{clean} est défini mais n'a aucun effet. Il est facile d'ajouter la suppression de fichiers et de répertoires lorsque le but \texttt{clean} est exécuté.
+
+Dans notre exemple exemple, nous voulons que l'exécution du but \texttt{clean} supprime :
+\begin{itemize}
+  \item le fichier exécutable ;
+  \item le répertoire contenant les fichiers objets engendrés.
+\end{itemize}
+
+~\\Pour supprimer le fichier exécutable lors de l'exécution du but \texttt{clean}, il suffit d'ajouter à la règle définissant l'édition des liens :
+
+\begin{lstlisting}[language=py]
+rule.deleteTargetFileOnClean ()
+\end{lstlisting}
+
+
+~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule (product, "Linking " + product)
+rule.deleteTargetFileOnClean ()
+rule.mOnErrorDeleteTarget = True
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
+postCommand.mCommand.append (product)
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+
+~\\Pour supprimer le répertoire \texttt{objects} lors de l'exécution du but \texttt{clean}, il suffit d'ajouter à la règle définissant la compilation des sources C :
+
+\begin{lstlisting}[language=py]
+  rule.deleteTargetDirectoryOnClean ()
+\end{lstlisting}
+
+~\\{\bf Récapitulation.} Les règles de compilation des sources C deviennent donc :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  object = "objects/" + source + ".o"
+  depObject = object + ".dep"
+  objectList.append (object)
+  rule = makefile.Rule (object, "Compiling " + source)
+  rule.deleteTargetDirectoryOnClean ()
+  rule.mDependences.append (source)
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+  rule.mCommand += ["-MD", "-MP", "-MF", depObject]
+  rule.enterSecondaryDependanceFile (depObject)
+  rule.mPriority = os.path.getsize (scriptDir + "/" + source)
+  make.addRule (rule)
+\end{lstlisting}
+
+~\\Il suffit maintenant d'ajouter le script \texttt{clean.py}, qui appelle le but \texttt{clean} :
+\lstinputlisting[language=py]{../clean.py}
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %   F I N    D U    D O C U M E N T                                                                                     *

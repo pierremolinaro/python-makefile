@@ -536,6 +536,10 @@ class Make:
             index = index + 1
             if (job.mState == 1) and (job.mReturnCode == 0) : # Terminated without error
               jobCount = jobCount - 1
+              if not os.path.exists (os.path.abspath (job.mTarget)): # Warning: target does not exist
+                displayLock.acquire ()
+                print MAGENTA () + BOLD () + "Warning: target \"" + job.mTarget + "\" was not created by rule execution." + ENDC ()
+                displayLock.release ()
               if len (job.mPostCommands) > 0:
                 job.mState = 2 # Ready to execute next post command
               else:
