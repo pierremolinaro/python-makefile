@@ -237,9 +237,9 @@ scriptDir = os.path.dirname (os.path.abspath (sys.argv[0]))
 os.chdir (scriptDir)
 \end{lstlisting}
 
-~\\Ensuite, on crée un objet \texttt{make}, qui est l'objet qui centralise la mise en œuvre de la construction.
+~\\Ensuite, on crée un objet \texttt{make}, qui est l'objet qui centralise la mise en œuvre de la construction. Un argument chaîne de caractères doit être fourni, il représente le but qui sera construit. La définition précise de ce but est faite plus loin.
 \begin{lstlisting}[language=py]
-make = makefile.Make ()
+make = makefile.Make ("all")
 \end{lstlisting}
 
 ~\\Pour présenter une solution générale, on construit deux listes, l'une contenant la liste des fichiers C à compiler, l'autre la liste des fichiers objets à lier. La seconde est initialement vide, elle est construite au fur et à mesure en bouclant sur la liste des fichiers source. 
@@ -336,8 +336,8 @@ Les trois règles que nous avons définies s'affichent :
 
 ~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet. Dans le cadre de notre exemple, nous allons définir deux buts :
 \begin{itemize}
-  \item \texttt{all}, qui commande la construction de l'exécutable ;
-  \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens.
+  \item \texttt{all}, qui commande la construction de l'exécutable (celui qui a été mentionné dans l'instanciation de la classe \texttt{Make}) ;
+  \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens (inutilisé pour l'instant).
 \end{itemize}
 
 \begin{lstlisting}[language=py]
@@ -370,13 +370,12 @@ On obtient :
 \textcolor{blue}{\bf{-}{-}{-} End of print goal {-}{-}{-}}
 }
 
-~\\Enfin, nous allons ordonner la construction du but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
+~\\Enfin, nous allons ordonner la construction du but qui a été désigné lors de l'instanciation de la classe \texttt{Make}, c'est-à-dire le but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
 \begin{lstlisting}[language=py]
-make.runGoal ("all", 0, False)
+make.runGoal (0, False)
 \end{lstlisting}
-Cet appel contient trois arguments :
+Cet appel contient deux arguments :
 \begin{itemize}
-\item le nom du but à construire, qui doit être l'un des buts précédemment définis ;
 \item une valeur entière qui précise combien de règles peuvent être exécutées en parallèle ;
   \begin{itemize}
   \item une valeur strictement positive définit le nombre de règles qui peuvent être exécutées en parallèle ; en particulier, la valeur $1$ impose une exécution séquentielle des règles ;
@@ -441,9 +440,9 @@ Ensuite, indiquer à GCC de le construire ; on ajoute les options de compilation
   rule.mCommand += ["-MD", "-MP", "-MF", depObject]
 \end{lstlisting}
 
-Enfin, on ajoute à la règle la dépendance en ce fichier :
+Enfin, on ajoute à la règle la dépendance en ce fichier (il faut placer l'instance de la classe \texttt{Make} en second argument) :
 \begin{lstlisting}[language=py]
-  rule.enterSecondaryDependanceFile (depObject)
+  rule.enterSecondaryDependanceFile (depObject, make)
 \end{lstlisting}
 
 
@@ -461,12 +460,13 @@ for source in sourceList:
   rule.mCommand += ["-c", source]
   rule.mCommand += ["-o", object]
   rule.mCommand += ["-MD", "-MP", "-MF", depObject]
-  rule.enterSecondaryDependanceFile (depObject)
+  rule.enterSecondaryDependanceFile (depObject, make)
   make.addRule (rule)
 \end{lstlisting}
 
 Maintenant, toute modification d'un fichier d'en-tête provoquera la compilation des fichiers sources qui l'inclut directement ou indirectement. C'est une dépendance dite \emph{secondaire} car l'absence du fichier n'empêche pas l'exécution de la règle. A contrario, l'absence du fichier source entraîne une erreur, car il n'y a aucun moyen de le construire.
 
+L'exécution de la méthode \texttt{enterSecondaryDependanceFile} peut prendre un temps important, puisque la date de modification de tous les fichiers cités dans le fichier \texttt{depObject} est vérifiée. Toutefois, si le but \texttt{clean} est invoqué, cette interrogation n'est pas réalisée car inutile : la durée d'exécution de la méthode est alors négligeable.
 
 
 
@@ -498,20 +498,26 @@ Par exemple, on peut demander à compiler les fichiers dans l'ordre décroissant
 
 Nous avons défini le but \texttt{compile}, mais l'avoir appelé jusqu'à présent. Nous allons voir comment nous pouvons écrire un nouveau script Python qui va appeler ce but.
 
-D'abord, nous modifions la fin du script \texttt{build.py} de la façon suivante :
+D'abord, nous modifions le début du script \texttt{build.py} de la façon suivante :
 \begin{lstlisting}[language=py]
 #--- Get goal as first argument
 goal = "all"
 if len (sys.argv) > 1 :
   goal = sys.argv [1]
+#--- Build python makefile
+make = makefile.Make (goal)
+\end{lstlisting}
+
+Ensuite, nous modifions la fin du script \texttt{build.py} de la façon suivante :
+\begin{lstlisting}[language=py]
 #--- Get max parallel jobs as second argument
 maxParallelJobs = 0 # 0 means use host processor count
 if len (sys.argv) > 2 :
   maxParallelJobs = int (sys.argv [2])
-make.runGoal (goal, maxParallelJobs, maxParallelJobs == 1)
+make.runGoal (maxParallelJobs, maxParallelJobs == 1)
 \end{lstlisting}
 
-Cette modification permet d'appeler ce script avec différents arguments, ce qui permet de préciser le but et le parallélisme.
+Ces modifications permettent d'appeler ce script avec différents arguments, ce qui permet de préciser le but et le parallélisme.
 
 ~\\Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilation, s'écrit :
 \lstinputlisting[language=py]{../compile.py}
@@ -669,7 +675,7 @@ for source in sourceList:
   rule.mCommand += ["-c", source]
   rule.mCommand += ["-o", object]
   rule.mCommand += ["-MD", "-MP", "-MF", depObject]
-  rule.enterSecondaryDependanceFile (depObject)
+  rule.enterSecondaryDependanceFile (depObject, make)
   rule.mPriority = os.path.getsize (scriptDir + "/" + source)
   make.addRule (rule)
 \end{lstlisting}
