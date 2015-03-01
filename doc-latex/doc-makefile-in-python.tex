@@ -173,7 +173,7 @@
 
 \title{\Huge{\textbf{Makefiles en Python}}}
 \author{Pierre Molinaro}
-\date \today 
+\date {1\up{er} mars 2015}
 
 \maketitle
 
@@ -256,19 +256,19 @@ for source in sourceList:
   objectList.append (object)
 \end{lstlisting}
 
-~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, le texte \texttt{Building} suivi du nom de la cible est affiché. 
+~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, en l'absence du second argument, le texte \texttt{Building} suivi du nom de la cible est affiché. 
 \begin{lstlisting}[language=py]
   rule = makefile.Rule (object, "Compiling " + source)
 \end{lstlisting}
 Attention, la cible (ici « \texttt{object} ») doit être obligatoirement un fichier. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
 
-~\\On ajoute ensuite les dépendances. Ici, il n'y a qu'une seule dépendance, le fichier source. D'une manière générale, \texttt{rule.mDependences} est une liste de chaînes de caractères, initialement vide.
+~\\On ajoute ensuite les dépendances. Ici, il n'y a qu'une seule dépendance, le fichier source.La variable \texttt{rule.mDependences} est une liste de chaînes de caractères, initialement vide.
 \begin{lstlisting}[language=py]
   rule.mDependences.append (source)
 \end{lstlisting}
 Attention, ne pas ajouter ici les dépendances envers les fichiers d'en-tête. On verra comment en tenir compte par la suite.
 
-~\\On construit maintenant la commande qui sera exécutée pour construire la cible. \texttt{rule.mCommand} est une liste de chaînes de caractères, initialement vide.
+~\\On construit maintenant la commande qui sera exécutée pour construire la cible.La variable \texttt{rule.mCommand} est une liste de chaînes de caractères, initialement vide.
 \begin{lstlisting}[language=py]
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
@@ -334,7 +334,7 @@ Les trois règles que nous avons définies s'affichent :
 \textcolor{blue}{\bf{-}{-}{-} End of print rule {-}{-}{-}}
 }
 
-~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet. Dans le cadre de notre exemple, nous allons définir deux buts :
+~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet (on verra plus loin comment le configurer). Dans le cadre de notre exemple, nous allons définir deux buts :
 \begin{itemize}
   \item \texttt{all}, qui commande la construction de l'exécutable (celui qui a été mentionné dans l'instanciation de la classe \texttt{Make}) ;
   \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens (inutilisé pour l'instant).
