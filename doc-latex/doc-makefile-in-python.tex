@@ -1,6 +1,6 @@
 %!TEX encoding = UTF-8 Unicode
 
-\documentclass[a4paper,12pt,obeyspaces,openany]{extarticle}
+\documentclass[a4paper,11pt]{extarticle}
 % L'option 'openany' permet de démarrer un chapitre sur une page paire
 
 %-----------------------------------------------------------------------------------------------------------------------*
@@ -85,13 +85,8 @@
 \usepackage[retainorgcmds]{IEEEtrantools}
 
 %-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   P A Q U E T A G E    « I F T H E N »                                                                                *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
 
-%--- Ce paquetage permet d'effectuer des tests : \ifthenelse{test}{bloc then}{bloc else}
-\usepackage{ifthen}
+\usepackage{mdframed}
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
@@ -139,26 +134,6 @@
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
-%   T I T L E T O C                                                                                                     *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-%--- Description dans le paquetage titlesec
-% http://forum.mathematex.net/latex-f6/formatage-avance-de-la-table-des-matieres-t11559.html
-
-\usepackage{titletoc}
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
-%   D P R O G R E S S                                                                                                   *
-%                                                                                                                       *
-%-----------------------------------------------------------------------------------------------------------------------*
-
-%--- Affiche les sections dans le log
-%\usepackage{dprogress}
-
-%-----------------------------------------------------------------------------------------------------------------------*
-%                                                                                                                       *
 %   D É B U T    D U    D O C U M E N T                                                                                 *
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
@@ -167,15 +142,23 @@
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
-%   P A G E    D E    T I T R E                                                                                         *
+%   T I T R E                                                                                                           *
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
 
 \title{\Huge{\textbf{Makefiles en Python}}}
 \author{Pierre Molinaro}
-\date {1\up{er} mars 2015}
+\date {4 mars 2015}
 
 \maketitle
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   T A B L E    D E S    M A T I È R E S                                                                               *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\tableofcontents
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
@@ -210,13 +193,13 @@ Le fichier \texttt{myRoutine.c} :
 
 La compilation séparée s'effectue par les commandes :
 
-\texttt{mkdir -p objects}
-
-\texttt{gcc -c main.c -o objects/main.c.o}
-
-\texttt{gcc -c myRoutine.c -o objects/myRoutine.c.o}
-
-\texttt{gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine}
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+mkdir -p objects\\
+gcc -c main.c -o objects/main.c.o\\
+gcc -c myRoutine.c -o objects/myRoutine.c.o\\
+gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
+\end{mdframed}
 
 
 Les fichiers objets sont rangés dans un répertoire \texttt{objects}, qu'il faut créer si il n'existe pas.
@@ -316,7 +299,8 @@ make.printRules ()
 
 Les trois règles que nous avons définies s'affichent :
 
-\noindent\texttt{\footnotesize
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
 \textcolor{blue}{\bf{-}{-}{-} Print 3 rules {-}{-}{-}}\\
 \textcolor{green}{\bf Target: "objects/main.c.o"}\\
 \hspace*{1.2em}Dependence: "main.c"\\
@@ -332,7 +316,7 @@ Les trois règles que nous avons définies s'affichent :
 \hspace*{1.2em}Command:  "gcc" "objects/main.c.o" "objects/myRoutine.c.o" "-o" "myRoutine"\\
 \hspace*{1.2em}Title: "Linking myRoutine"\\
 \textcolor{blue}{\bf{-}{-}{-} End of print rule {-}{-}{-}}
-}
+\end{mdframed}
 
 ~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet (on verra plus loin comment le configurer). Dans le cadre de notre exemple, nous allons définir deux buts :
 \begin{itemize}
@@ -358,7 +342,8 @@ make.printGoals ()
 
 On obtient :
 
-\noindent\texttt{\footnotesize
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
 \textcolor{blue}{\bf{-}{-}{-} Print 2 goals {-}{-}{-}}\\
 \textcolor{green}{\bf Goal: "compile"}\\
 \hspace*{1.2em}Target: "objects/main.c.o"\\
@@ -368,7 +353,7 @@ On obtient :
 \hspace*{1.2em}Target: "myRoutine"\\
 \hspace*{1.2em}Message: "Building all"\\
 \textcolor{blue}{\bf{-}{-}{-} End of print goal {-}{-}{-}}
-}
+\end{mdframed}
 
 ~\\Enfin, nous allons ordonner la construction du but qui a été désigné lors de l'instanciation de la classe \texttt{Make}, c'est-à-dire le but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
 \begin{lstlisting}[language=py]
@@ -387,33 +372,36 @@ Cet appel contient deux arguments :
 
 L'exécution du script affiche (noter la création du répertoire \texttt{objects}) :
 
-\noindent\texttt{\footnotesize
-\textcolor{blue}{Making "objects" directory}\\
-\textcolor{blue}{Compiling main.c}\\
-\textcolor{blue}{Compiling myRoutine.c}\\
-\textcolor{blue}{Linking myRoutine}
-}
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Making "objects" directory}\\
+\textcolor{blue}{\bf Compiling main.c}\\
+\textcolor{blue}{\bf Compiling myRoutine.c}\\
+\textcolor{blue}{\bf Linking myRoutine}
+\end{mdframed}
 
 ~\\Si on relance aussitôt le script, le makefile examine les dépendances et signale qu'il n'y a rien à construire :
 
-\noindent\texttt{\footnotesize
-\textcolor{blue}{Nothing to make.}
-}
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Nothing to make.}
+\end{mdframed}
 
 
 
 ~\\Appeler \texttt{runGoal} avec le dernier argument à \texttt{True} permet d'afficher les commandes qui exécutées :
 
-\noindent\texttt{\footnotesize
-\textcolor{blue}{Making "objects" directory}\\
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Making "objects" directory}\\
 mkdir -p objects\\
-\textcolor{blue}{Compiling main.c}\\
+\textcolor{blue}{\bf Compiling main.c}\\
 gcc -c main.c -o objects/main.c.o\\
-\textcolor{blue}{Compiling myRoutine.c}\\
+\textcolor{blue}{\bf Compiling myRoutine.c}\\
 gcc -c myRoutine.c -o objects/myRoutine.c.o\\
-\textcolor{blue}{Linking myRoutine}\\
+\textcolor{blue}{\bf Linking myRoutine}\\
 gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
-}
+\end{mdframed}
 
 ~\\Si une erreur est détectée, par exemple si l'exécution d'une règle échoue par suite d'une erreur de compilation, l'exécution de \texttt{ruleGoal} attend la fin de toutes les exécutions parallèles pour terminer. Pour afficher les erreurs et abandonner l'exécution du script en retournant un code d'erreur, on peut appeler :
 \begin{lstlisting}[language=py]
@@ -573,13 +561,14 @@ make.addRule (rule)
 
 L'exécution du script affiche maintenant:
 
-\noindent\texttt{\footnotesize
-\textcolor{blue}{Making "objects" directory}\\
-\textcolor{blue}{Compiling main.c}\\
-\textcolor{blue}{Compiling myRoutine.c}\\
-\textcolor{blue}{Linking myRoutine}\\
-\textcolor{blue}{Stripping myRoutine}
-}
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Making "objects" directory}\\
+\textcolor{blue}{\bf Compiling main.c}\\
+\textcolor{blue}{\bf Compiling myRoutine.c}\\
+\textcolor{blue}{\bf Linking myRoutine}\\
+\textcolor{blue}{\bf Stripping myRoutine}
+\end{mdframed}
 
 
 
@@ -591,9 +580,9 @@ L'exécution du script affiche maintenant:
 
 En cas d'erreur d'exécution d'une commande (par exemple due à une erreur de compilation), le fichier exécutable, si il existe, n'est pas supprimé : on a alors un exécutable qui ne correspond pas à l'état de compilation du programme.
 
-Il est très simple d'ordonner la suppression de l'exécutable lors d'une erreur d'exécution d'une commande. Il suffit de mettre l'attribut \texttt{mOnErrorDeleteTarget} de la règle qui définit l'édition de liens à \texttt{True} :
+Il est très simple d'ordonner la suppression de l'exécutable lors d'une erreur d'exécution d'une commande. Il suffit de mettre l'attribut \texttt{mDeleteTargetOnError} de la règle qui définit l'édition de liens à \texttt{True} :
 \begin{lstlisting}[language=py]
-rule.mOnErrorDeleteTarget = True
+rule.mDeleteTargetOnError = True
 \end{lstlisting}
 Cette technique peut être utilisée pour toute cible.
 
@@ -601,7 +590,7 @@ Cette technique peut être utilisée pour toute cible.
 \begin{lstlisting}[language=py]
 product = "myRoutine"
 rule = makefile.Rule (product, "Linking " + product)
-rule.mOnErrorDeleteTarget = True
+rule.mDeleteTargetOnError = True
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
@@ -641,7 +630,7 @@ rule.deleteTargetFileOnClean ()
 product = "myRoutine"
 rule = makefile.Rule (product, "Linking " + product)
 rule.deleteTargetFileOnClean ()
-rule.mOnErrorDeleteTarget = True
+rule.mDeleteTargetOnError = True
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
@@ -684,9 +673,90 @@ for source in sourceList:
 \lstinputlisting[language=py]{../clean.py}
 
 
+
+
+
+
+
+
+
+
+
+\section{Ouverture automatique d'un source sur erreur}
+
+Il est possible de programmer l'ouverture automatique avec un éditeur externe d'un fichier source quand une erreur se déclenche. Il suffit d'ajouter aux règles concernées la ligne :
+\begin{lstlisting}[language=py]
+  rule.mOpenSourceOnError = True
+\end{lstlisting}
+
+
+Nous allons commencer par provoquer une erreur de compilation en insérant un caractère « \S » à la 3\up{e} ligne du fichier \texttt{myRoutine.h} :
+\begin{lstlisting}[mathescape,language=C]
+#ifndef MYROUTINE_DEFINED
+#define MYROUTINE_DEFINED
+$\S$
+void myRoutine (void) ;
+
+#endif
+\end{lstlisting}
+
+Si on relance la compilation, l'erreur est détectée (sur un multi-cœur, les deux compilations ont lieu en parallèle) :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\noindent\texttt{\footnotesize
+\textcolor{blue}{\bf Compiling myRoutine.c}\\
+\textcolor{blue}{\bf Compiling main.c}\\
+In file included from main.c:1:\\
+In file included from myRoutine.c:1:\\
+./myRoutine.h:3:1: error: non-ASCII characters are not allowed outside of literals and identifiers\\
+\S\\
+\^\\
+1 error generated.\\
+./myRoutine.h:3:1: error: non-ASCII characters are not allowed outside of literals and identifiers\\
+\S\\
+\^\\
+1 error generated.\\
+\textcolor{red}{\bf Return code: 1}\\
+Wait for job termination...\\
+\textcolor{red}{\bf 1 error.}
+}
+\end{mdframed}
+
+Quand la propriété \texttt{mOpenSourceOnError} est vraie et en cas d'erreur, le makefile recherche dans le flux de sortie des commandes ayant provoqué une erreur un nom de fichier en début de ligne. Plus précisément, on se base sur la chaîne qui précède la première occurrence du caractère « : ». Cette recherche fournit quatre réponses :
+\begin{itemize}
+\item \colorbox{lightgray!20}{\tt In file included from main.c}
+\item \colorbox{lightgray!20}{\tt Compiling main.c}
+\item \colorbox{lightgray!20}{\tt ./myRoutine.h}
+\item \colorbox{lightgray!20}{\tt ./myRoutine.h}
+\end{itemize}
+
+Les deux premières réponses ne correspondent pas à un fichier existant, elles sont ignorées. Les deux suivantes provoquent l'ouverture du fichier \texttt{./myRoutine.h} avec un éditeur externe, qui est par défaut :
+\begin{itemize}
+\item sur Mac : \texttt{TextEdit} ;
+\item sur Linux : \texttt{gEdit}.
+\end{itemize}
+
+Il est facile de changer l'éditeur de texte par défaut, il suffit d'affecter les propriétés suivantes de l'objet \texttt{make} :
+\begin{itemize}
+\item pour Mac : \texttt{mMacTextEditor} ;
+\item pour Linux : \texttt{mLinuxTextEditor}.
+\end{itemize}
+
+Par exemple, pour que l'éditeur \texttt{TextWrangler} soit utilisé sur Mac :
+\begin{lstlisting}[language=Py]
+make.mMacTextEditor = "TextWrangler"
+\end{lstlisting}
+
+
+
+
+
 \section{Le script complet \texttt{build.py}}
 
 \lstinputlisting[language=py]{../build.py}
+
+
+
 
 
 
