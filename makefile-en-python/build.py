@@ -13,6 +13,7 @@ if len (sys.argv) > 1 :
   goal = sys.argv [1]
 #--- Build python makefile
 make = makefile.Make (goal)
+make.mMacTextEditor = "TextWrangler"
 #--- Add C files compile rule
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -30,11 +31,12 @@ for source in sourceList:
   rule.mCommand += ["-MD", "-MP", "-MF", depObject]
   rule.enterSecondaryDependanceFile (depObject, make)
   rule.mPriority = os.path.getsize (scriptDir + "/" + source)
+  rule.mOpenSourceOnError = True
   make.addRule (rule)
 #--- Add linker rule
 product = "myRoutine"
 rule = makefile.Rule (product, "Linking " + product)
-rule.mOnErrorDeleteTarget = True
+rule.mDeleteTargetOnError = True
 rule.deleteTargetFileOnClean ()
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]

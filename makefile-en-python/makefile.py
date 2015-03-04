@@ -145,6 +145,7 @@ def runInThread (job, displayLock, terminationSemaphore):
   while True:
     line = childProcess.stdout.readline ()
     if line != "":
+      job.mOutputLines.append (line)
       displayLock.acquire ()
       sys.stdout.write (line) # Print without newline
       displayLock.release ()
@@ -198,16 +199,20 @@ class Job:
   mReturnCode = None
   mPriority = 0
   mState = 0 # 0: waiting for execution
+  mOutputLines = []
+  mOpenSourceOnError = False # Do not try to open source file on error
   
   #--------------------------------------------------------------------------*
 
-  def __init__ (self, target, requiredFiles, command, postCommands, priority, title):
+  def __init__ (self, target, requiredFiles, command, postCommands, priority, title, openSourceOnError):
     self.mTarget = copy.deepcopy (target)
     self.mCommand = copy.deepcopy (command)
     self.mRequiredFiles = copy.deepcopy (requiredFiles)
     self.mTitle = copy.deepcopy (title)
     self.mPostCommands = copy.deepcopy (postCommands)
     self.mPriority = priority
+    self.mOutputLines = []
+    self.mOpenSourceOnError = openSourceOnError
 
   #--------------------------------------------------------------------------*
 
@@ -258,8 +263,9 @@ class Rule:
   mTitle = ""
   mPostCommands = []
   mPriority = 0
-  mOnErrorDeleteTarget = False # No operation on error
+  mDeleteTargetOnError = False # No operation on error
   mCleanOperation = 0 # No operation on clean
+  mOpenSourceOnError = False # Do not try to open source file on error
   
   #--------------------------------------------------------------------------*
 
@@ -270,7 +276,8 @@ class Rule:
     self.mSecondaryMostRecentModificationDate = 0.0
     self.mPostCommands = []
     self.mPriority = 0
-    self.mOnErrorDeleteTarget = False # No operation on error
+    self.mDeleteTargetOnError = False # No operation on error
+    self.mOpenSourceOnError = False # Do not try to open source file on error
     self.mCleanOperation = 0 # No operation on clean
     if title == "":
       self.mTitle = "Building " + target
@@ -325,6 +332,8 @@ class Make:
   mModificationDateDictionary = {}
   mGoals = {}
   mSelectedGoal = ""
+  mLinuxTextEditor = ""
+  mMacTextEditor = ""
 
   #--------------------------------------------------------------------------*
 
@@ -335,6 +344,8 @@ class Make:
     self.mModificationDateDictionary = {}
     self.mGoals = {}
     self.mSelectedGoal = goal
+    self.mLinuxTextEditor = "gEdit"
+    self.mMacTextEditor = "TextEdit"
 
   #--------------------------------------------------------------------------*
 
@@ -491,7 +502,7 @@ class Make:
         appendToJobList = True
   #--- Append to job list
     if appendToJobList:
-      self.mJobList.append (Job (target, jobDependenceFiles, rule.mCommand, rule.mPostCommands, rule.mPriority, rule.mTitle))
+      self.mJobList.append (Job (target, jobDependenceFiles, rule.mCommand, rule.mPostCommands, rule.mPriority, rule.mTitle, rule.mOpenSourceOnError))
   #--- Return
     return appendToJobList
 
@@ -561,6 +572,14 @@ class Make:
               jobCount = jobCount - 1
               job.mState = 4 # Means Terminated
               index = index - 1 # For removing job from list
+              if job.mOpenSourceOnError:
+                for line in job.mOutputLines:
+                  components = line.split (':')
+                  if (len (components) > 1) and os.path.exists (os.path.abspath (components [0])) :
+                    if sys.platform == "darwin":
+                      os.system ("open -a \"" + self.mMacTextEditor + "\" \"" + components [0] + "\"")
+                    elif sys.platform == "linux2":
+                      os.system ("\"" + self.mLinuxTextEditor + "\" \"" + components [0] + "\"")
             elif (job.mState == 3) and (job.mReturnCode == 0): # post command is terminated without error
               jobCount = jobCount - 1
               job.mPostCommands.pop (0) # Remove completed post command
@@ -647,7 +666,7 @@ class Make:
       self.runJobs (maxConcurrentJobs, showCommand)
       if self.mErrorCount > 0:
         for rule in self.mRuleList:
-          if rule.mOnErrorDeleteTarget and os.path.exists (os.path.abspath (rule.mTarget)):
+          if rule.mDeleteTargetOnError and os.path.exists (os.path.abspath (rule.mTarget)):
             runCommand (["rm", rule.mTarget], "Delete \"" + rule.mTarget + "\" on error", showCommand)
     elif self.mSelectedGoal == "clean" :
       filesToRemoveList = []
