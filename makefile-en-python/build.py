@@ -48,7 +48,8 @@ postCommand.mCommand.append (product)
 rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 #--- Print rules
-#make.printRules ()
+make.printRules ()
+make.writeRuleDependancesInDotFile ("make-deps.dot")
 #--- Add goals
 make.addGoal ("all", [product], "Building all")
 make.addGoal ("compile", objectList, "Compile C files")
