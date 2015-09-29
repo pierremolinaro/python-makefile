@@ -365,14 +365,21 @@ class Make:
         s += " \"" + cmd + "\""
       print s
       print "  Title: \"" + rule.mTitle + "\""
+      print "  Delete target on error: " + ("yes" if rule.mDeleteTargetOnError else "no")
+      cleanOp = "none"
+      if rule.mCleanOperation == 1:
+        cleanOp = "delete target file: \"" + rule.mTarget + "\""
+      elif rule.mCleanOperation == 2:
+        cleanOp = "delete target directory: \"" + os.path.dirname (rule.mTarget) + "\""
+      print "  Clean operation: " + cleanOp
       index = 0
-      for (command, title) in rule.mPostCommands:
-        index = index + 1
-        s = "  Post command " + str (index) + ": "
-        for cmd in command:
-          s += " \"" + cmd + "\""
-        print s
-        print "  Its title: \"" + title + "\""
+      for postCommand in rule.mPostCommands:
+         index = index + 1
+         s = "  Post command " + str (index) + ": "
+         for cmd in postCommand.mCommand:
+           s += " \"" + cmd + "\""
+         print s
+         print "    Title: \"" + postCommand.mTitle + "\""
         
     print BOLD_BLUE () + "--- End of print rule ---" + ENDC ()
 
