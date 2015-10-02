@@ -107,7 +107,6 @@
   xleftmargin=20pt
 }
 
-%--- Édition de liens
 \lstdefinelanguage{py}{
   style=py,
   comment=[l]{\%},
@@ -120,6 +119,30 @@
   xleftmargin=15pt,
   frame=tl
 }
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   H Y P E R R E F                                                                                                     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+
+%--- Pour les hyperliens, et le contrôle de la génération PDF 
+\usepackage[pagebackref]{hyperref}
+
+\hypersetup{pdftitle      = {Piccolo}}
+\hypersetup{pdfauthor     = {Pierre Molinaro}}
+
+\hypersetup{colorlinks    = true}
+\hypersetup{anchorcolor   = black}
+\hypersetup{filecolor     = black}
+\hypersetup{menucolor     = black}
+\hypersetup{plainpages    = false}
+\hypersetup{pdfstartview  = FitH}
+\hypersetup{pdfpagelayout = OneColumn}
+\hypersetup{linkcolor  = blue}
+\hypersetup{urlcolor   = blue}
+\hypersetup{citecolor  = blue}
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
@@ -148,7 +171,7 @@
 
 \title{\Huge{\textbf{Makefiles en Python}}}
 \author{Pierre Molinaro}
-\date {4 mars 2015}
+\date {2 octobre 2015}
 
 \maketitle
 
@@ -165,6 +188,18 @@
 %   L E S    C H A P I T R E S                                                                                          *
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
+
+\section{Versions}
+  \begin{tabular}{lll}
+    \textbf{Version} & \textbf{Date} & \textbf{Commentaire}\\
+    1.0 & 4 mars 2015 & Version initiale \\
+    2.0 & 2 octobre 2015 & Définition de plusieurs cibles pour une règle (exemple page \pageref{plusieursCibles})\\
+  \end{tabular}
+\\~
+
+La version 2.0 apporte une incompatiblité avec les scripts de la version précédente. Le premier argument de \texttt{makefile.Rule} doit être une liste. Les lignes modifiées des listings sont complétées par le commentaire « \texttt{\# Release 2} ».
+
+%Le chapitre \hyperref[plusieursCibles]{page \pageref{plusieursCibles}} donne 
 
 \section{Introduction}
 
@@ -241,7 +276,7 @@ for source in sourceList:
 
 ~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, en l'absence du second argument, le texte \texttt{Building} suivi du nom de la cible est affiché. 
 \begin{lstlisting}[language=py]
-  rule = makefile.Rule (object, "Compiling " + source)
+  rule = makefile.Rule ([object], "Compiling " + source)  # Release 2
 \end{lstlisting}
 Attention, la cible (ici « \texttt{object} ») doit être obligatoirement un fichier. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
 
@@ -272,7 +307,7 @@ objectList = []
 for source in sourceList:
   object = "objects/" + source + ".o"
   objectList.append (object)
-  rule = makefile.Rule (object, "Compiling " + source)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
   rule.mDependences.append (source)
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
@@ -284,7 +319,7 @@ Remarquez que les fichiers objets sont rangés dans le répertoire \texttt{objec
 ~\\On va maintenant construire la règle relative à l'édition des liens. Le nom du fichier exécutable est défini par la variable \texttt{product}, et les dépendances sont les fichiers objets dont la liste est définie par la variable \texttt{objectList}.
 \begin{lstlisting}[language=py]
 product = "myRoutine"
-rule = makefile.Rule (product, "Linking " + product)
+rule = makefile.Rule ([product], "Linking " + product) # Release 2
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
@@ -442,7 +477,7 @@ for source in sourceList:
   object = "objects/" + source + ".o"
   depObject = object + ".dep"
   objectList.append (object)
-  rule = makefile.Rule (object, "Compiling " + source)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
   rule.mDependences.append (source)
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
@@ -534,8 +569,7 @@ En argument, figure le titre qui sera affiché lors de l'exécution de la post c
 
 ~\\On ajoute ensuite la commande qui doit être exécutée :
 \begin{lstlisting}[language=py]
-postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
-postCommand.mCommand.append (product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
 \end{lstlisting}
 
 ~\\Enfin, on ajoute la \emph{post commande} à la liste des post commandes de la règle :
@@ -547,14 +581,13 @@ rule.mPostCommands.append (postCommand)
 ~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
 \begin{lstlisting}[language=py]
 product = "myRoutine"
-rule = makefile.Rule (product, "Linking " + product)
+rule = makefile.Rule ([product], "Linking " + product) # Release 2
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
 rule.mCommand += ["-o", product]
 postCommand = makefile.PostCommand ("Stripping " + product)
-postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
-postCommand.mCommand.append (product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
 rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 \end{lstlisting}
@@ -589,15 +622,14 @@ Cette technique peut être utilisée pour toute cible.
 ~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
 \begin{lstlisting}[language=py]
 product = "myRoutine"
-rule = makefile.Rule (product, "Linking " + product)
+rule = makefile.Rule ([product], "Linking " + product)  # Release 2
 rule.mDeleteTargetOnError = True
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
 rule.mCommand += ["-o", product]
 postCommand = makefile.PostCommand ("Stripping " + product)
-postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
-postCommand.mCommand.append (product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
 rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 \end{lstlisting}
@@ -628,7 +660,7 @@ rule.deleteTargetFileOnClean ()
 ~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
 \begin{lstlisting}[language=py]
 product = "myRoutine"
-rule = makefile.Rule (product, "Linking " + product)
+rule = makefile.Rule ([product], "Linking " + product)  # Release 2
 rule.deleteTargetFileOnClean ()
 rule.mDeleteTargetOnError = True
 rule.mDependences += objectList
@@ -636,8 +668,7 @@ rule.mCommand += ["gcc"]
 rule.mCommand += objectList
 rule.mCommand += ["-o", product]
 postCommand = makefile.PostCommand ("Stripping " + product)
-postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
-postCommand.mCommand.append (product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
 rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 \end{lstlisting}
@@ -657,7 +688,7 @@ for source in sourceList:
   object = "objects/" + source + ".o"
   depObject = object + ".dep"
   objectList.append (object)
-  rule = makefile.Rule (object, "Compiling " + source)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
   rule.deleteTargetDirectoryOnClean ()
   rule.mDependences.append (source)
   rule.mCommand.append ("gcc")
@@ -746,6 +777,47 @@ Par exemple, pour que l'éditeur \texttt{TextWrangler} soit utilisé sur Mac :
 \begin{lstlisting}[language=Py]
 make.mMacTextEditor = "TextWrangler"
 \end{lstlisting}
+
+
+
+
+
+\section{Définition de plusieurs cibles à une règle}\label{plusieursCibles}
+
+Avec la version 2, plusieurs fichiers cibles peuvent être construis par l'exécution d'une règle. À titre d'exemple, nous allons modifier la règle d'édition de liens pour construire un fichier texte « map » qui contient la carte mémoire de l'exécutable. Trois modifications sont apportées dans le listing ci-dessus (notées \texttt{note1}, \texttt{note2} et \texttt{note3}).
+
+\begin{lstlisting}[language=Py]
+product = "myRoutine"
+mapFile = product + ".map" # note1
+rule = makefile.Rule ([product, mapFile], "Linking " + product) # Release 2, note2
+rule.mDeleteTargetOnError = True
+rule.deleteTargetFileOnClean ()
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+rule.mCommand += ["-Wl,-map," + mapFile] # note3
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+{\bf note1.} Le nouveau fichier cible \texttt{mapFile} est défini ici.
+
+{\bf note2.} Il est ajouté à la liste des cibles construites par la règle.
+
+{\bf note3.} La commande est complétée pour construire le nouveau fichier cible.
+\\~
+
+En exécutant le but \texttt{all}, les deux fichiers \texttt{myRoutine} et \texttt{myRoutine.map} sont construits. Si on supprime l'un des deux fichiers, exécuter le but \texttt{all} le reconstruit. Si on commente la construction du fichier \texttt{myRoutine.map} (ligne commentée par \texttt{note3}), exécuter le but \texttt{all} affiche une alerte indiquant que le fichier n'a pas été construit.
+
+
+
+
+
+
+
 
 
 
