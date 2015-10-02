@@ -22,7 +22,7 @@ for source in sourceList:
   object = "objects/" + source + ".o"
   depObject = object + ".dep"
   objectList.append (object)
-  rule = makefile.Rule (object, "Compiling " + source)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
   rule.deleteTargetDirectoryOnClean ()
   rule.mDependences.append (source)
   rule.mCommand.append ("gcc")
@@ -35,23 +35,25 @@ for source in sourceList:
   make.addRule (rule)
 #--- Add linker rule
 product = "myRoutine"
-rule = makefile.Rule (product, "Linking " + product)
+mapFile = product + ".map"
+rule = makefile.Rule ([product, mapFile], "Linking " + product) # Release 2
 rule.mDeleteTargetOnError = True
 rule.deleteTargetFileOnClean ()
 rule.mDependences += objectList
 rule.mCommand += ["gcc"]
 rule.mCommand += objectList
 rule.mCommand += ["-o", product]
+rule.mCommand += ["-Wl,-map," + mapFile]
 postCommand = makefile.PostCommand ("Stripping " + product)
-postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u"]
-postCommand.mCommand.append (product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
 rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 #--- Print rules
-make.printRules ()
-make.writeRuleDependancesInDotFile ("make-deps.dot")
+# make.printRules ()
+# make.writeRuleDependancesInDotFile ("make-deps.dot")
+make.checkRules ()
 #--- Add goals
-make.addGoal ("all", [product], "Building all")
+make.addGoal ("all", [product, mapFile], "Building all")
 make.addGoal ("compile", objectList, "Compile C files")
 #make.printGoals ()
 #--- Get max parallel jobs as second argument
