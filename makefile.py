@@ -2,6 +2,14 @@
 # -*- coding: UTF-8 -*-
 
 #----------------------------------------------------------------------------*
+#   Releases                                                                 *
+#----------------------------------------------------------------------------*
+# 1.0: march 18th, 2015
+#        first release
+# 2.0: october 2th, 2015
+#        added several target definition for rules
+#
+#----------------------------------------------------------------------------*
 
 import subprocess, sys, os, copy
 import urllib, shutil, subprocess
