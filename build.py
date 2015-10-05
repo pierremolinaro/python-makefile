@@ -55,6 +55,7 @@ make.checkRules ()
 #--- Add goals
 make.addGoal ("all", [product, mapFile], "Building all")
 make.addGoal ("compile", objectList, "Compile C files")
+#make.simulateClean ()
 #make.printGoals ()
 #--- Get max parallel jobs as second argument
 maxParallelJobs = 0 # 0 means use host processor count

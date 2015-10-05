@@ -171,7 +171,7 @@
 
 \title{\Huge{\textbf{Makefiles en Python}}}
 \author{Pierre Molinaro}
-\date {2 octobre 2015}
+\date {5 octobre 2015}
 
 \maketitle
 
@@ -194,6 +194,8 @@
     \textbf{Version} & \textbf{Date} & \textbf{Commentaire}\\
     1.0 & 4 mars 2015 & Version initiale \\
     2.0 & 2 octobre 2015 & Définition de plusieurs cibles pour une règle (exemple page \pageref{plusieursCibles})\\
+    2.1 & 5 octobre 2015 & Ajout de la vérification dynamique des types des arguments\\
+        &                & Ajout de la simulation du but \texttt{clean} (page \pageref{simulationButClean})\\
   \end{tabular}
 \\~
 
@@ -704,12 +706,15 @@ for source in sourceList:
 \lstinputlisting[language=py]{../clean.py}
 
 
+\subsection{Simulation du but \texttt{clean}}\label{simulationButClean}
 
+À partir de la version 2.1, il est possible d'afficher sans les exécuter les commandes lancées par le but \texttt{clean}. Pour cela, il suffit d'appeler la méthode \texttt{simulateClean}.
 
+\begin{lstlisting}[language=py]
+  make.simulateClean ()
+\end{lstlisting}
 
-
-
-
+Cette méthode doit être appelée avant l'appel de \texttt{make.runGoal} pour être prise en compte.
 
 
 

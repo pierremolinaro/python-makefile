@@ -8,13 +8,15 @@
 #        first release
 # 2.0: october 2th, 2015
 #        added several target definition for rules
+# 2.1: october 5th, 2015
+#        added checking routine formal argument run-time types
 #
 #----------------------------------------------------------------------------*
 
 import subprocess, sys, os, copy
 import urllib, shutil, subprocess
 import platform, json, operator
-import threading
+import threading, types, traceback
 
 if sys.version_info >= (2, 6) :
   import multiprocessing
@@ -278,6 +280,20 @@ class Rule:
   #--------------------------------------------------------------------------*
 
   def __init__ (self, targets, title = ""):
+    if not isinstance (targets, types.ListType):
+      print BOLD_RED () + "*** Rule type instanciation: first argument 'targets' is not a list ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
+    else:
+      for aTarget in targets:
+        if not isinstance (aTarget, types.StringTypes):
+          print BOLD_RED () + "*** Rule type instanciation: an element of first argument 'targets' is not a string ***" + ENDC ()
+          traceback.print_stack ()
+          sys.exit (1)
+    if not isinstance (title, types.StringTypes):
+      print BOLD_RED () + "*** Rule type instanciation: second argument 'title' is not a string ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
     self.mTargets = copy.deepcopy (targets)
     self.mDependences = []
     self.mCommand = []
@@ -307,6 +323,10 @@ class Rule:
   #--------------------------------------------------------------------------*
 
   def enterSecondaryDependanceFile (self, secondaryDependanceFile, make):
+    if not isinstance (secondaryDependanceFile, types.StringTypes):
+      print BOLD_RED () + "*** Rule.enterSecondaryDependanceFile: 'secondaryDependanceFile' argument is not a string ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
     if make.mSelectedGoal != "clean":
       filePath = os.path.abspath (secondaryDependanceFile)
       if not os.path.exists (filePath):
@@ -344,10 +364,15 @@ class Make:
   mSelectedGoal = ""
   mLinuxTextEditor = ""
   mMacTextEditor = ""
+  mSimulateClean = False
 
   #--------------------------------------------------------------------------*
 
   def __init__ (self, goal):
+    if not isinstance (goal, types.StringTypes):
+      print BOLD_RED () + "*** Make instanciation: 'goal' argument is not a string ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
     self.mRuleList = []
     self.mJobList = []
     self.mErrorCount = 0
@@ -360,6 +385,10 @@ class Make:
   #--------------------------------------------------------------------------*
 
   def addRule (self, rule):
+    if not isinstance (rule, Rule):
+      print BOLD_RED () + "*** Make.addRule: 'rule' argument is not an instance of Rule type ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
     self.mRuleList.append (copy.deepcopy (rule))
 
   #--------------------------------------------------------------------------*
@@ -675,6 +704,24 @@ class Make:
   #--------------------------------------------------------------------------*
 
   def addGoal (self, goal, targetList, message):
+    if not isinstance (goal, types.StringTypes):
+      print BOLD_RED () + "*** Make.addGoal: 'goal' first argument is not a string ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
+    if not isinstance (targetList, types.ListType):
+      print BOLD_RED () + "*** Make.addGoal: 'targetList' second argument is not a list ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
+    else:
+      for aTarget in targetList:
+        if not isinstance (aTarget, types.StringTypes):
+          print BOLD_RED () + "*** Make.addGoal: an element of 'targetList' second argument 'targets' is not a string ***" + ENDC ()
+          traceback.print_stack ()
+          sys.exit (1)
+    if not isinstance (message, types.StringTypes):
+      print BOLD_RED () + "*** Make.addGoal: 'message' third argument is not a string ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
     if self.mGoals.has_key (goal) or (goal == "clean") :
       self.enterError ("The '" + goal + "' goal is already defined")
     else:
@@ -697,6 +744,14 @@ class Make:
   #--------------------------------------------------------------------------*
 
   def runGoal (self, maxConcurrentJobs, showCommand):
+    if not isinstance (maxConcurrentJobs, types.IntType):
+      print BOLD_RED () + "*** Make.runGoal: 'maxConcurrentJobs' first argument is not an integer ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
+    if not isinstance (showCommand, types.BooleanType):
+      print BOLD_RED () + "*** Make.runGoal: 'showCommand' second argument is not a boolean ***" + ENDC ()
+      traceback.print_stack ()
+      sys.exit (1)
     if self.mGoals.has_key (self.mSelectedGoal) :
       (targetList, message) = self.mGoals [self.mSelectedGoal]
       for target in targetList:
@@ -723,10 +778,16 @@ class Make:
               directoriesToRemoveSet.add (dirPath)
       for dir in directoriesToRemoveSet:
         if os.path.exists (os.path.abspath (dir)):
-          runCommand (["rm", "-fr", dir], "Removing \"" + dir + "\"", showCommand)
+          if self.mSimulateClean:
+            print MAGENTA () + BOLD () + "Simulated clean command: " + ENDC () + "rm -fr '" + dir + "'"
+          else:
+            runCommand (["rm", "-fr", dir], "Removing \"" + dir + "\"", showCommand)
       for file in filesToRemoveList:
         if os.path.exists (os.path.abspath (file)):
-          runCommand (["rm", "-f", file], "Deleting \"" + file + "\"", showCommand)
+          if self.mSimulateClean:
+            print MAGENTA () + BOLD () + "Simulated clean command: " + ENDC () + "rm -f '" + file + "'"
+          else:
+            runCommand (["rm", "-f", file], "Deleting \"" + file + "\"", showCommand)
     else:
       errorMessage = "The '" + self.mSelectedGoal + "' goal is not defined; defined goals:"
       for key in self.mGoals:
@@ -734,6 +795,11 @@ class Make:
         errorMessage += "\n  '" + key + "': " + message
       print BOLD_RED () + errorMessage + ENDC ()
       self.mErrorCount = self.mErrorCount + 1
+
+  #--------------------------------------------------------------------------*
+
+  def simulateClean (self):
+    self.mSimulateClean = True
 
   #--------------------------------------------------------------------------*
 
