@@ -190,14 +190,18 @@
 %-----------------------------------------------------------------------------------------------------------------------*
 
 \section{Versions}
-  \begin{tabular}{lll}
+  \begin{tabular}{llp{10.5cm}}
     \textbf{Version} & \textbf{Date} & \textbf{Commentaire}\\
     1.0 & 4 mars 2015 & Version initiale \\
     2.0 & 2 octobre 2015 & Définition de plusieurs cibles pour une règle (exemple page \pageref{plusieursCibles})\\
     2.1 & 5 octobre 2015 & Ajout de la vérification dynamique des types des arguments\\
         &                & Ajout de la simulation du but \texttt{clean} (page \pageref{simulationButClean})\\
+    2.2 & 24 octobre 2015 & Remplacement de \texttt{subprocess.Popen} en \texttt{subprocess.call} dans \texttt{runCommand}\\
+        &                & Ajout de la vérification de l'existence de l'utilitaire appelé dans les commandes par la fonction \texttt{find\_executable} (voir la note page \pageref{verifUtilitaire})\\
+        &                & Ajout d'un argument booléen optionnel à l'instanciation d" la classe \texttt{Make} pour afficher le chemin complet de l'utilitaire appelé dans les commandes (voir les notes pages \pageref{logUtilityToolPath} et \pageref{logUtilityToolPath2})\\
   \end{tabular}
 \\~
+
 
 La version 2.0 apporte une incompatiblité avec les scripts de la version précédente. Le premier argument de \texttt{makefile.Rule} doit être une liste. Les lignes modifiées des listings sont complétées par le commentaire « \texttt{\# Release 2} ».
 
@@ -262,6 +266,11 @@ os.chdir (scriptDir)
 make = makefile.Make ("all")
 \end{lstlisting}
 
+{\bf Note.}\label{logUtilityToolPath} À partir de la version 2.2, la création de l'objet \texttt{make} présente un second argument booléen optionnel. Si il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux.
+\begin{lstlisting}[language=py]
+make = makefile.Make ("all", True) # Affiche le chemin de chaque utilitaire appele
+\end{lstlisting}
+
 ~\\Pour présenter une solution générale, on construit deux listes, l'une contenant la liste des fichiers C à compiler, l'autre la liste des fichiers objets à lier. La seconde est initialement vide, elle est construite au fur et à mesure en bouclant sur la liste des fichiers source. 
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
@@ -288,13 +297,19 @@ Attention, la cible (ici « \texttt{object} ») doit être obligatoirement un fi
 \end{lstlisting}
 Attention, ne pas ajouter ici les dépendances envers les fichiers d'en-tête. On verra comment en tenir compte par la suite.
 
-~\\On construit maintenant la commande qui sera exécutée pour construire la cible.La variable \texttt{rule.mCommand} est une liste de chaînes de caractères, initialement vide.
+~\\On construit maintenant la commande qui sera exécutée pour construire la cible. La variable \texttt{rule.mCommand} est une liste de chaînes de caractères, initialement vide.
 \begin{lstlisting}[language=py]
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
   rule.mCommand += ["-o", object]
 \end{lstlisting}
 Il est impératif de définir une chaîne par argument. Si par exemple on veut ajouter l'option « \texttt{-O2} », écrire \texttt{rule.mCommand.append ("gcc -O2")} est une erreur, il faut obligatoirement écrire \texttt{rule.mCommand += ["gcc", "-O2"]}.
+
+{\bf Note.}\label{verifUtilitaire} À partir de la version 2.2, l'existence de l'utilitaire appelé est vérifiée. Un message d'erreur est affiché si l'utilitaire n'est par trouvé ; par exemple, si on écrit \texttt{rule.mCommand.append ("gccc")}, alors le message d'erreur suivant s'affiche :
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{red}{\bf*** Cannot find~\textquotesingle gccc\textquotesingle~executable ***}
+\end{mdframed}
 
 ~\\La construction de la règle est terminée ; on peut maintenant l'ajouter au makefile.
 \begin{lstlisting}[language=py]
@@ -529,16 +544,18 @@ D'abord, nous modifions le début du script \texttt{build.py} de la façon suiva
 goal = "all"
 if len (sys.argv) > 1 :
   goal = sys.argv [1]
-#--- Build python makefile
-make = makefile.Make (goal)
-\end{lstlisting}
-
-Ensuite, nous modifions la fin du script \texttt{build.py} de la façon suivante :
-\begin{lstlisting}[language=py]
-#--- Get max parallel jobs as second argument
+#--- Get max parallel jobs
 maxParallelJobs = 0 # 0 means use host processor count
 if len (sys.argv) > 2 :
   maxParallelJobs = int (sys.argv [2])
+#--- Build python makefile
+make = makefile.Make (goal, maxParallelJobs == 1)
+\end{lstlisting}
+
+{\bf Note.}\label{logUtilityToolPath2} À partir de la version 2.2, \texttt{makefile.Make} présente un second argument booléen optionnel.  Si il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux. En plaçant \texttt{maxParallelJobs == 1} comme second argument, on affiche ce chemin si la construction des buts est réalisée séquentiellement, sans parallélisme.
+
+Ensuite, nous modifions la fin du script \texttt{build.py} de la façon suivante :
+\begin{lstlisting}[language=py]
 make.runGoal (maxParallelJobs, maxParallelJobs == 1)
 \end{lstlisting}
 
