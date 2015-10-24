@@ -11,8 +11,12 @@ os.chdir (scriptDir)
 goal = "all"
 if len (sys.argv) > 1 :
   goal = sys.argv [1]
+#--- Get max parallel jobs as second argument
+maxParallelJobs = 0 # 0 means use host processor count
+if len (sys.argv) > 2 :
+  maxParallelJobs = int (sys.argv [2])
 #--- Build python makefile
-make = makefile.Make (goal)
+make = makefile.Make (goal, maxParallelJobs == 1) # Display executable if sequential build
 make.mMacTextEditor = "TextWrangler"
 #--- Add C files compile rule
 sourceList = ["main.c", "myRoutine.c"]
@@ -57,10 +61,6 @@ make.addGoal ("all", [product, mapFile], "Building all")
 make.addGoal ("compile", objectList, "Compile C files")
 #make.simulateClean ()
 #make.printGoals ()
-#--- Get max parallel jobs as second argument
-maxParallelJobs = 0 # 0 means use host processor count
-if len (sys.argv) > 2 :
-  maxParallelJobs = int (sys.argv [2])
 make.runGoal (maxParallelJobs, maxParallelJobs == 1)
 #--- Build Ok ?
 make.printErrorCountAndExitOnError ()
