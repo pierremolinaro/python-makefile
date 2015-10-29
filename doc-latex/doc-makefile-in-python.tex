@@ -171,7 +171,7 @@
 
 \title{\Huge{\textbf{Makefiles en Python}}}
 \author{Pierre Molinaro}
-\date {5 octobre 2015}
+\date {24 octobre 2015}
 
 \maketitle
 
@@ -266,9 +266,9 @@ os.chdir (scriptDir)
 make = makefile.Make ("all")
 \end{lstlisting}
 
-{\bf Note.}\label{logUtilityToolPath} À partir de la version 2.2, la création de l'objet \texttt{make} présente un second argument booléen optionnel. Si il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux.
+{\bf Note.}\label{logUtilityToolPath} À partir de la version 2.2, la création de l'objet \texttt{make} présente un second argument booléen optionnel. S'il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux.
 \begin{lstlisting}[language=py]
-make = makefile.Make ("all", True) # Affiche le chemin de chaque utilitaire appele
+make = makefile.Make ("all", True) # Affiche le chemin de chaque commande appelee
 \end{lstlisting}
 
 ~\\Pour présenter une solution générale, on construit deux listes, l'une contenant la liste des fichiers C à compiler, l'autre la liste des fichiers objets à lier. La seconde est initialement vide, elle est construite au fur et à mesure en bouclant sur la liste des fichiers source. 
@@ -285,11 +285,11 @@ for source in sourceList:
   objectList.append (object)
 \end{lstlisting}
 
-~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument le fichier cible de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, en l'absence du second argument, le texte \texttt{Building} suivi du nom de la cible est affiché. 
+~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument la liste des fichiers cibles de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, en l'absence du second argument, le texte \texttt{Building} suivi du nom des cibles est affiché. 
 \begin{lstlisting}[language=py]
   rule = makefile.Rule ([object], "Compiling " + source)  # Release 2
 \end{lstlisting}
-Attention, la cible (ici « \texttt{object} ») doit être obligatoirement un fichier. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
+Attention, la cible (ici « [\texttt{object}] ») doit être obligatoirement une liste de fichiers. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
 
 ~\\On ajoute ensuite les dépendances. Ici, il n'y a qu'une seule dépendance, le fichier source.La variable \texttt{rule.mDependences} est une liste de chaînes de caractères, initialement vide.
 \begin{lstlisting}[language=py]
