@@ -61,6 +61,7 @@ make.addGoal ("all", [product, mapFile], "Building all")
 make.addGoal ("compile", objectList, "Compile C files")
 #make.simulateClean ()
 #make.printGoals ()
+#make.doNotShowProgressString ()
 make.runGoal (maxParallelJobs, maxParallelJobs == 1)
 #--- Build Ok ?
 make.printErrorCountAndExitOnError ()

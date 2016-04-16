@@ -169,9 +169,9 @@
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
 
-\title{\Huge{\textbf{Makefiles en Python}}}
+\title{\bf \Huge{Makefiles en Python\\Version 2.3}}
 \author{Pierre Molinaro}
-\date {24 octobre 2015}
+\date {16 avril 2016}
 
 \maketitle
 
@@ -199,6 +199,7 @@
     2.2 & 24 octobre 2015 & Remplacement de \texttt{subprocess.Popen} en \texttt{subprocess.call} dans \texttt{runCommand}\\
         &                & Ajout de la vérification de l'existence de l'utilitaire appelé dans les commandes par la fonction \texttt{find\_executable} (voir la note page \pageref{verifUtilitaire})\\
         &                & Ajout d'un argument booléen optionnel à l'instanciation d" la classe \texttt{Make} pour afficher le chemin complet de l'utilitaire appelé dans les commandes (voir les notes pages \pageref{logUtilityToolPath} et \pageref{logUtilityToolPath2})\\
+    2.3 & 16 avril 2016 & Ajout de l'affichage du pourcentage de la progression (voir page \pageref{affichagePourcentage})\\
   \end{tabular}
 \\~
 
@@ -297,7 +298,7 @@ Attention, la cible (ici « [\texttt{object}] ») doit être obligatoirement une
 \end{lstlisting}
 Attention, ne pas ajouter ici les dépendances envers les fichiers d'en-tête. On verra comment en tenir compte par la suite.
 
-~\\On construit maintenant la commande qui sera exécutée pour construire la cible. La variable \texttt{rule.mCommand} est une liste de chaînes de caractères, initialement vide.
+~\\On construit maintenant la commande qui sera exécutée pour construire la cible. La variable « \texttt{rule.mCommand} » est une liste de chaînes de caractères, initialement vide.
 \begin{lstlisting}[language=py]
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
@@ -408,9 +409,12 @@ On obtient :
 \end{mdframed}
 
 ~\\Enfin, nous allons ordonner la construction du but qui a été désigné lors de l'instanciation de la classe \texttt{Make}, c'est-à-dire le but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
+
 \begin{lstlisting}[language=py]
 make.runGoal (0, False)
 \end{lstlisting}
+
+
 Cet appel contient deux arguments :
 \begin{itemize}
 \item une valeur entière qui précise combien de règles peuvent être exécutées en parallèle ;
@@ -422,17 +426,28 @@ Cet appel contient deux arguments :
 \item une valeur booléenne qui indique si la commande relative à chaque règle doit être affichée ou non ; le titre de chaque règle est toujours affiché.
 \end{itemize}
 
-L'exécution du script affiche (noter la création du répertoire \texttt{objects}) :
+L'exécution du script affiche  (noter la création du répertoire \texttt{objects}) :
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
 \textcolor{blue}{\bf Making "objects" directory}\\
-\textcolor{blue}{\bf Compiling main.c}\\
-\textcolor{blue}{\bf Compiling myRoutine.c}\\
-\textcolor{blue}{\bf Linking myRoutine}
+$[$~33\%]~\textcolor{blue}{\bf Compiling main.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$100\%]~\textcolor{blue}{\bf Linking myRoutine}
 \end{mdframed}
 
-~\\Si on relance aussitôt le script, le makefile examine les dépendances et signale qu'il n'y a rien à construire :
+{\bf Nouveau dans la version 2.3.}\label{affichagePourcentage} Le pourcentage qui est affiché représente le travail qui sera effectué lorsque la commande citée sur la même ligne sera réalisée. Aussi, la dernière commande est toujours précédée de « \texttt{[100\%]} ». Si on ne veut pas afficher cette information, il suffit d'appeller la méthode \texttt{doNotShowProgressString} de la classe \texttt{Make} avant d'appeler \texttt{runGoal} :
+
+\begin{lstlisting}[language=py]
+make.runGoal (0, False)
+make.doNotShowProgressString ()
+\end{lstlisting}
+
+
+
+
+
+Si on relance aussitôt le script, le makefile examine les dépendances et signale qu'il n'y a rien à construire :
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -447,11 +462,11 @@ L'exécution du script affiche (noter la création du répertoire \texttt{object
 \tt\footnotesize
 \textcolor{blue}{\bf Making "objects" directory}\\
 mkdir -p objects\\
-\textcolor{blue}{\bf Compiling main.c}\\
+$[$~33\%]~\textcolor{blue}{\bf Compiling main.c}\\
 gcc -c main.c -o objects/main.c.o\\
-\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
 gcc -c myRoutine.c -o objects/myRoutine.c.o\\
-\textcolor{blue}{\bf Linking myRoutine}\\
+$[$100\%]~\textcolor{blue}{\bf Linking myRoutine}\\
 gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
 \end{mdframed}
 
@@ -616,9 +631,9 @@ L'exécution du script affiche maintenant:
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
 \textcolor{blue}{\bf Making "objects" directory}\\
-\textcolor{blue}{\bf Compiling main.c}\\
-\textcolor{blue}{\bf Compiling myRoutine.c}\\
-\textcolor{blue}{\bf Linking myRoutine}\\
+$[$~33\%]~\textcolor{blue}{\bf Compiling main.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$100\%]~\textcolor{blue}{\bf Linking myRoutine}\\
 \textcolor{blue}{\bf Stripping myRoutine}
 \end{mdframed}
 
@@ -757,8 +772,8 @@ Si on relance la compilation, l'erreur est détectée (sur un multi-cœur, les d
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \noindent\texttt{\footnotesize
-\textcolor{blue}{\bf Compiling myRoutine.c}\\
-\textcolor{blue}{\bf Compiling main.c}\\
+$[$~33\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling main.c}\\
 In file included from main.c:1:\\
 In file included from myRoutine.c:1:\\
 ./myRoutine.h:3:1: error: non-ASCII characters are not allowed outside of literals and identifiers\\
