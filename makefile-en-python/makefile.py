@@ -14,6 +14,8 @@
 #        changed subprocess.Popen to subprocess.call in runCommand
 #        added command tool checking using 'find_executable' function
 #        added optional argument to Make class initializer to log command utility tool path
+# 2.3: april 16th, 2016
+#        added advance percentage
 #
 #——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————*
 
@@ -291,10 +293,10 @@ class Job:
 
   #····················································································································*
 
-  def run (self, displayLock, terminationSemaphore, showCommand):
+  def run (self, displayLock, terminationSemaphore, showCommand, progressString):
     displayLock.acquire ()
     if self.mTitle != "":
-      print BOLD_BLUE () + self.mTitle + ENDC ()
+      print progressString + BOLD_BLUE () + self.mTitle + ENDC ()
     if (self.mTitle == "") or showCommand :
       cmdAsString = ""
       for s in self.mCommand:
@@ -302,7 +304,7 @@ class Job:
           cmdAsString += '"' + s + '" '
         else:
           cmdAsString += s + ' '
-      print cmdAsString
+      print progressString + cmdAsString
     displayLock.release ()
     thread = threading.Thread (target=runInThread, args=(self, displayLock, terminationSemaphore))
     thread.start()
@@ -431,6 +433,7 @@ class Make:
   mMacTextEditor = ""
   mSimulateClean = False
   mLogUtilityTool = True
+  mShowProgressString = True
 
   #····················································································································*
 
@@ -448,6 +451,11 @@ class Make:
     self.mLinuxTextEditor = "gEdit"
     self.mMacTextEditor = "TextEdit"
     self.mLogUtilityTool = logUtilityTool
+
+  #····················································································································*
+
+  def doNotShowProgressString (self) :
+     self.mShowProgressString = False
 
   #····················································································································*
 
@@ -669,6 +677,8 @@ class Make:
         displayLock = threading.Lock ()
         loop = True
         returnCode = 0
+        totalJobCount = float (len (self.mJobList))
+        launchedJobCount = 0.0
         while loop:
         #--- Launch jobs in parallel
           for job in self.mJobList:
@@ -685,8 +695,14 @@ class Make:
                       job.mLogUtilityTool
                     )
                     displayLock.release ()
+                #--- Progress string
+                launchedJobCount += 1.0
+                if self.mShowProgressString:
+                  progressString = "[{0:3d}%] ".format (int (100.0 * launchedJobCount / totalJobCount))
+                else:
+                  progressString = ""
                 #--- Run job
-                job.run (displayLock, terminationSemaphore, showCommand)
+                job.run (displayLock, terminationSemaphore, showCommand, progressString)
                 jobCount = jobCount + 1
                 job.mState = 1 # Means is running
               elif job.mState == 2: # Waiting for executing post command
