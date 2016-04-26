@@ -436,7 +436,9 @@ $[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
 $[$100\%]~\textcolor{blue}{\bf Linking myRoutine}
 \end{mdframed}
 
-{\bf Nouveau dans la version 2.3.}\label{affichagePourcentage} Le pourcentage qui est affiché représente le travail qui sera effectué lorsque la commande citée sur la même ligne sera réalisée. Aussi, la dernière commande est toujours précédée de « \texttt{[100\%]} ». Si on ne veut pas afficher cette information, il suffit d'appeller la méthode \texttt{doNotShowProgressString} de la classe \texttt{Make} avant d'appeler \texttt{runGoal} :
+{\bf Nouveau dans la version 2.3.}\label{affichagePourcentage} Le pourcentage qui est affiché représente le pourcentage de commandes réalisées lorsque la commande citée sur la même ligne sera terminée. Si $N$ commandes doivent être executées, pour la $i$\up{e}  commande ($1 \leqslant i \leqslant N$) la valeur affichée est $100 \times i / N$. Aussi, la dernière commande est toujours précédée de « \texttt{[100\%]} ».
+
+Si on ne veut pas afficher cette information, il suffit d'appeller la méthode \texttt{doNotShowProgressString} de la classe \texttt{Make} avant d'appeler \texttt{runGoal} :
 
 \begin{lstlisting}[language=py]
 make.runGoal (0, False)
