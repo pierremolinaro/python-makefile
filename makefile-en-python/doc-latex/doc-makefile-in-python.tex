@@ -31,6 +31,8 @@
 %\usepackage{fouriernc}
 \usepackage[default]{sourcesanspro}
 
+\usepackage[dvipsnames]{xcolor}
+
 %-----------------------------------------------------------------------------------------------------------------------*
 %                                                                                                                       *
 %   M I S E    E N    P A G E                                                                                           *
@@ -169,9 +171,9 @@
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
 
-\title{\bf \Huge{Makefiles en Python\\Version 2.3}}
+\title{\bf \Huge{Makefiles en Python\\Version 3.0}}
 \author{Pierre Molinaro}
-\date {16 avril 2016}
+\date {30 mai 2016}
 
 \maketitle
 
@@ -200,6 +202,7 @@
         &                & Ajout de la vérification de l'existence de l'utilitaire appelé dans les commandes par la fonction \texttt{find\_executable} (voir la note page \pageref{verifUtilitaire})\\
         &                & Ajout d'un argument booléen optionnel à l'instanciation d" la classe \texttt{Make} pour afficher le chemin complet de l'utilitaire appelé dans les commandes (voir les notes pages \pageref{logUtilityToolPath} et \pageref{logUtilityToolPath2})\\
     2.3 & 16 avril 2016 & Ajout de l'affichage du pourcentage de la progression (voir page \pageref{affichagePourcentage})\\
+    3.0 & 30 mai 2016 & Compatibilité avec Python 3 : le script peut être utiliséaussi bien en Python 2 qu'en Python 3\\
   \end{tabular}
 \\~
 
@@ -355,15 +358,15 @@ Les trois règles que nous avons définies s'affichent :
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
 \textcolor{blue}{\bf{-}{-}{-} Print 3 rules {-}{-}{-}}\\
-\textcolor{green}{\bf Target: "objects/main.c.o"}\\
+\textcolor{OliveGreen}{\bf Target: "objects/main.c.o"}\\
 \hspace*{1.2em}Dependence: "main.c"\\
 \hspace*{1.2em}Command:  "gcc" "-c" "main.c" "-o" "objects/main.c.o"\\
 \hspace*{1.2em}Title: "Compiling main.c"\\
-\textcolor{green}{\bf Target: "objects/myRoutine.c.o"}\\
+\textcolor{OliveGreen}{\bf Target: "objects/myRoutine.c.o"}\\
 \hspace*{1.2em}Dependence: "myRoutine.c"\\
 \hspace*{1.2em}Command:  "gcc" "-c" "myRoutine.c" "-o" "objects/myRoutine.c.o"\\
 \hspace*{1.2em}Title: "Compiling myRoutine.c"\\
-\textcolor{green}{\bf Target: "myRoutine"}\\
+\textcolor{OliveGreen}{\bf Target: "myRoutine"}\\
 \hspace*{1.2em}Dependence: "objects/main.c.o"\\
 \hspace*{1.2em}Dependence: "objects/myRoutine.c.o"\\
 \hspace*{1.2em}Command:  "gcc" "objects/main.c.o" "objects/myRoutine.c.o" "-o" "myRoutine"\\
@@ -398,11 +401,11 @@ On obtient :
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
 \textcolor{blue}{\bf{-}{-}{-} Print 2 goals {-}{-}{-}}\\
-\textcolor{green}{\bf Goal: "compile"}\\
+\textcolor{OliveGreen}{\bf Goal: "compile"}\\
 \hspace*{1.2em}Target: "objects/main.c.o"\\
 \hspace*{1.2em}Target: "objects/myRoutine.c.o"\\
 \hspace*{1.2em}Message: "Compile C files"\\
-\textcolor{green}{\bf Goal: "all"}\\
+\textcolor{OliveGreen}{\bf Goal: "all"}\\
 \hspace*{1.2em}Target: "myRoutine"\\
 \hspace*{1.2em}Message: "Building all"\\
 \textcolor{blue}{\bf{-}{-}{-} End of print goal {-}{-}{-}}
