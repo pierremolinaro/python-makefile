@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Versions}{}% 1
+\BOOKMARK [1][-]{section.2}{Introduction}{}% 2
+\BOOKMARK [1][-]{section.3}{L'exemple}{}% 3
+\BOOKMARK [1][-]{section.4}{Construction du script Python}{}% 4
+\BOOKMARK [1][-]{section.5}{D\351pendance des fichiers d'en-t\352te}{}% 5
+\BOOKMARK [1][-]{section.6}{Priorit\351 entre les r\350gles}{}% 6
+\BOOKMARK [1][-]{section.7}{Prise en compte de plusieurs buts}{}% 7
+\BOOKMARK [1][-]{section.8}{Post commandes}{}% 8
+\BOOKMARK [1][-]{section.9}{Suppression des cibles en cas d'erreur}{}% 9
+\BOOKMARK [1][-]{section.10}{Le but clean}{}% 10
+\BOOKMARK [2][-]{subsection.10.1}{Simulation du but clean}{section.10}% 11
+\BOOKMARK [1][-]{section.11}{Ouverture automatique d'un source sur erreur}{}% 12
+\BOOKMARK [1][-]{section.12}{D\351finition de plusieurs cibles \340 une r\350gle}{}% 13
+\BOOKMARK [1][-]{section.13}{Le script complet build.py}{}% 14
+\BOOKMARK [1][-]{section.14}{Autres fonctions}{}% 15
+\BOOKMARK [2][-]{subsection.14.1}{Impression en couleur}{section.14}% 16
+\BOOKMARK [2][-]{subsection.14.2}{La m\351thode enterError}{section.14}% 17
+\BOOKMARK [2][-]{subsection.14.3}{La m\351thode errorCount}{section.14}% 18
+\BOOKMARK [2][-]{subsection.14.4}{La m\351thode printErrorCount}{section.14}% 19
+\BOOKMARK [2][-]{subsection.14.5}{Recherche d'un fichier dans une arborescence}{section.14}% 20

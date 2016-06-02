@@ -1,0 +1,21 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Versions}{2}{section.1}
+\contentsline {section}{\numberline {2}Introduction}{2}{section.2}
+\contentsline {section}{\numberline {3}L'exemple}{2}{section.3}
+\contentsline {section}{\numberline {4}Construction du script Python}{3}{section.4}
+\contentsline {section}{\numberline {5}D\IeC {\'e}pendance des fichiers d'en-t\IeC {\^e}te}{7}{section.5}
+\contentsline {section}{\numberline {6}Priorit\IeC {\'e} entre les r\IeC {\`e}gles}{8}{section.6}
+\contentsline {section}{\numberline {7}Prise en compte de plusieurs buts}{8}{section.7}
+\contentsline {section}{\numberline {8}Post commandes}{10}{section.8}
+\contentsline {section}{\numberline {9}Suppression des cibles en cas d'erreur}{11}{section.9}
+\contentsline {section}{\numberline {10}Le but \texttt {clean}}{11}{section.10}
+\contentsline {subsection}{\numberline {10.1}Simulation du but \texttt {clean}}{13}{subsection.10.1}
+\contentsline {section}{\numberline {11}Ouverture automatique d'un source sur erreur}{13}{section.11}
+\contentsline {section}{\numberline {12}D\IeC {\'e}finition de plusieurs cibles \IeC {\`a} une r\IeC {\`e}gle}{14}{section.12}
+\contentsline {section}{\numberline {13}Le script complet \texttt {build.py}}{15}{section.13}
+\contentsline {section}{\numberline {14}Autres fonctions}{16}{section.14}
+\contentsline {subsection}{\numberline {14.1}Impression en couleur}{16}{subsection.14.1}
+\contentsline {subsection}{\numberline {14.2}La m\IeC {\'e}thode \texttt {enterError}}{16}{subsection.14.2}
+\contentsline {subsection}{\numberline {14.3}La m\IeC {\'e}thode \texttt {errorCount}}{17}{subsection.14.3}
+\contentsline {subsection}{\numberline {14.4}La m\IeC {\'e}thode \texttt {printErrorCount}}{17}{subsection.14.4}
+\contentsline {subsection}{\numberline {14.5}Recherche d'un fichier dans une arborescence}{17}{subsection.14.5}

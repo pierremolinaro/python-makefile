@@ -1,0 +1,947 @@
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper,11pt]{extarticle}
+% L'option 'openany' permet de démarrer un chapitre sur une page paire
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   R É G L A G E S    « F R A N Ç A I S »                                                                              *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Paquetage pour le codage des sources en UTF-8
+\usepackage[utf8]{inputenc}
+
+%--- Latex demande ce paquetage pour mieux afficher le caractère "°" et \textquotesingle "'"
+\usepackage{textcomp}
+
+%--- Ce paquetage permet d'effectuer certaines césures, et ainsi d'éviter les messages "Overfull \hbox"
+\usepackage[T1]{fontenc}
+
+\usepackage{lmodern}
+
+%--- Paquetage pour imposer les réglages français
+\usepackage[frenchb]{babel}
+
+%------------------------------------------------------------------------------------------------
+%   C H O I X    D E    L A    P O L I C E
+%------------------------------------------------------------------------------------------------
+
+\usepackage[scaled=0.9, default]{sourcecodepro}
+%\usepackage{fouriernc}
+\usepackage[default]{sourcesanspro}
+
+\usepackage[dvipsnames]{xcolor}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   M I S E    E N    P A G E                                                                                           *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+% Voir "Une courte introduction à Latex2e", § 6.4
+
+%--- Marge gauche : 2,54 cm ; le paramètre \hoffset contient cette valeur, moins 1 pouce
+%    \hoffset = 2,54 cm - 2,54 cm = 0 cm
+\setlength{\hoffset}{0.cm}
+
+%--- Marges supplémentaires, différenciées pour les pages gauches et droites ; ici, aucune.
+\setlength{\oddsidemargin }{0 cm}
+\setlength{\evensidemargin}{0 cm}
+
+%--- Largeur du texte
+%    \textwidth = 210 mm - 25.4 mm - 25.4 mm = 15,4 cm
+\setlength{\textwidth}{15.92 cm}
+
+%--- Marge haute : 2,54 cm ; le paramètre \voffset contient cette valeur, moins 1 pouce
+%    \voffset = 2,54 cm - 2,54 cm = 0 cm
+\setlength{\voffset}{0 cm}
+
+%--- Distance entre la marge haute et l'en-tête : 0 cm
+\setlength{\topmargin}{0 cm}
+
+%--- Hauteur de l'en-tête de chaque page : 1 cm
+\setlength{\headheight}{1 cm}
+
+%--- Distance entre l'en-tête de chaque page et le corps : 0,5 cm
+\setlength{\headsep}{0.5 cm}
+
+%--- Hauteur du corps
+%    \textheight = 29,7 cm - 2,54 cm - 2,8 cm - 1,5 cm = 22,6 cm
+\setlength{\textheight}{22.86 cm}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   E X T E N S I O N S    P O U R    L ' É C R I T U R E    D E S     F O R M U L E S    M A T H É M A T I Q U E S     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+%--- Extensions pour l'écriture des formules mathématiques
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+
+%--- Paquetage "IEEEtrantools"
+% Pour créer des tableaux d'équations, bien alignées
+% Voir courte-intro-latex.pdf, page §3.5.2 page 83
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage{mdframed}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   P A Q U E T A G E    « L I S T I N G S »                                                                            *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{red},
+  stringstyle=\color{orange},
+  frame=l,
+  backgroundcolor=\color{green!20},
+  numberstyle=\ttfamily\small,
+  xleftmargin=20pt
+}
+
+\lstdefinelanguage{py}{
+  style=py,
+  comment=[l]{\%},
+}
+
+\lstdefinestyle{py}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{orange!25},
+  numberstyle=\ttfamily\small,
+  xleftmargin=15pt,
+  frame=tl
+}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   H Y P E R R E F                                                                                                     *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+
+%--- Pour les hyperliens, et le contrôle de la génération PDF 
+\usepackage[pagebackref]{hyperref}
+
+\hypersetup{pdftitle      = {Makefile en Python}}
+\hypersetup{pdfauthor     = {Pierre Molinaro}}
+
+\hypersetup{colorlinks    = true}
+\hypersetup{anchorcolor   = black}
+\hypersetup{filecolor     = black}
+\hypersetup{menucolor     = black}
+\hypersetup{plainpages    = false}
+\hypersetup{pdfstartview  = FitH}
+\hypersetup{pdfpagelayout = OneColumn}
+\hypersetup{linkcolor  = blue}
+\hypersetup{urlcolor   = blue}
+\hypersetup{citecolor  = blue}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   E N - T Ê T E S    E T    P I E D S    D E    P A G E S                                                             *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\usepackage{xcolor}
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   D É B U T    D U    D O C U M E N T                                                                                 *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\begin{document} 
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   T I T R E                                                                                                           *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\title{\bf \Huge{Makefiles en Python\\Version 3.0}}
+\author{Pierre Molinaro}
+\date {30 mai 2016}
+
+\maketitle
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   T A B L E    D E S    M A T I È R E S                                                                               *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\tableofcontents
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%                                                                                                                       *
+%   L E S    C H A P I T R E S                                                                                          *
+%                                                                                                                       *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\section{Versions}
+  \begin{tabular}{llp{10.5cm}}
+    \textbf{Version} & \textbf{Date} & \textbf{Commentaire}\\
+    1.0 & 4 mars 2015 & Version initiale \\
+    2.0 & 2 octobre 2015 & Définition de plusieurs cibles pour une règle (exemple page \pageref{plusieursCibles})\\
+    2.1 & 5 octobre 2015 & Ajout de la vérification dynamique des types des arguments\\
+        &                & Ajout de la simulation du but \texttt{clean} (page \pageref{simulationButClean})\\
+    2.2 & 24 octobre 2015 & Remplacement de \texttt{subprocess.Popen} en \texttt{subprocess.call} dans \texttt{runCommand}\\
+        &                & Ajout de la vérification de l'existence de l'utilitaire appelé dans les commandes par la fonction \texttt{find\_executable} (voir la note page \pageref{verifUtilitaire})\\
+        &                & Ajout d'un argument booléen optionnel à l'instanciation de la classe \texttt{Make} pour afficher le chemin complet de l'utilitaire appelé dans les commandes (voir les notes pages \pageref{logUtilityToolPath} et \pageref{logUtilityToolPath2})\\
+    2.3 & 16 avril 2016 & Ajout de l'affichage du pourcentage de la progression (voir page \pageref{affichagePourcentage})\\
+    3.0 & 30 mai 2016 & Compatibilité avec Python 3 : le script peut être utilisé aussi bien en Python 2 qu'en Python 3\\
+  \end{tabular}
+\\~
+
+
+La version 2.0 apporte une incompatiblité avec les scripts de la version précédente. Le premier argument de \texttt{makefile.Rule} doit être une liste. Les lignes modifiées des listings sont complétées par le commentaire « \texttt{\# Release 2} ».
+
+%Le chapitre \hyperref[plusieursCibles]{page \pageref{plusieursCibles}} donne 
+
+\section{Introduction}
+
+Le module \texttt{makefile} permet de construire facilement des scripts Python qui ont toutes les facilités des fichiers \emph{makefile} exécutés par l'utilitaire \texttt{make}. Les avantages principaux de la classe \texttt{makefile} sont :
+\begin{itemize}
+  \item la description des règles de dépendances est beaucoup plus simple ;
+  \item les espaces dans un chemin sont pris en compte naturellement ; 
+  \item le langage Python offre des possibilités que les makefiles n'ont pas.
+\end{itemize}
+
+Dans la suite, nous allons donner un exemple d'utilisation de cette classe.
+
+\section{L'exemple}
+
+L'exemple consiste en deux fichiers C et un fichier d'en-tête.
+
+Le fichier \texttt{main.c} :
+\lstinputlisting[language=C]{../../main.c}
+
+
+Le fichier \texttt{myRoutine.h} :
+\lstinputlisting[language=C]{../../myRoutine.h}
+
+
+Le fichier \texttt{myRoutine.c} :
+\lstinputlisting[language=C]{../../myRoutine.c}
+
+La compilation séparée s'effectue par les commandes :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+mkdir -p objects\\
+gcc -c main.c -o objects/main.c.o\\
+gcc -c myRoutine.c -o objects/myRoutine.c.o\\
+gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
+\end{mdframed}
+
+
+Les fichiers objets sont rangés dans un répertoire \texttt{objects}, qu'il faut créer si il n'existe pas.
+
+
+\section{Construction du script Python}
+
+Ce script est contenu dans un fichier exécutable \texttt{build.py}, situé dans le même répertoire que les fichiers sources C. Sa composition est décrite pas-à-pas.
+
+~\\La première opération est d'importer le module \texttt{makefile}, ainsi que les autres modules utiles.
+\begin{lstlisting}[language=py]
+import sys, os, makefile
+\end{lstlisting}
+
+~\\Pour pouvoir travailler avec des chemins relatifs, on fixe le répertoire courant, obtenu à partir de l'argument $0$.
+\begin{lstlisting}[language=py]
+scriptDir = os.path.dirname (os.path.abspath (sys.argv[0]))
+os.chdir (scriptDir)
+\end{lstlisting}
+
+~\\Ensuite, on crée un objet \texttt{make}, qui est l'objet qui centralise la mise en œuvre de la construction. Un argument chaîne de caractères doit être fourni, il représente le but qui sera construit. La définition précise de ce but est faite plus loin.
+\begin{lstlisting}[language=py]
+make = makefile.Make ("all")
+\end{lstlisting}
+
+{\bf Note.}\label{logUtilityToolPath} À partir de la version 2.2, la création de l'objet \texttt{make} présente un second argument booléen optionnel. S'il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux.
+\begin{lstlisting}[language=py]
+make = makefile.Make ("all", True) # Affiche le chemin de chaque commande appelee
+\end{lstlisting}
+
+~\\Pour présenter une solution générale, on construit deux listes, l'une contenant la liste des fichiers C à compiler, l'autre la liste des fichiers objets à lier. La seconde est initialement vide, elle est construite au fur et à mesure en bouclant sur la liste des fichiers source. 
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  ...
+\end{lstlisting}
+
+~\\Dans le corps de la boucle, on construit chaque règle correspondant à la compilation d'un fichier source. On commence par définir le fichier \emph{cible} de la règle, qui est ici le fichier objet construit par la compilation du source C. On en profite pour accumuler dans \texttt{objectList} la liste des fichiers objet.
+\begin{lstlisting}[language=py]
+  object = "objects/" + source + ".o"
+  objectList.append (object)
+\end{lstlisting}
+
+~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument la liste des fichiers cibles de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, en l'absence du second argument, le texte \texttt{Building} suivi du nom des cibles est affiché. 
+\begin{lstlisting}[language=py]
+  rule = makefile.Rule ([object], "Compiling " + source)  # Release 2
+\end{lstlisting}
+Attention, la cible (ici « [\texttt{object}] ») doit être obligatoirement une liste de fichiers. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
+
+~\\On ajoute ensuite les dépendances. Ici, il n'y a qu'une seule dépendance, le fichier source. La variable \texttt{rule.mDependences} est une liste de chaînes de caractères, initialement vide.
+\begin{lstlisting}[language=py]
+  rule.mDependences.append (source)
+\end{lstlisting}
+Attention, ne pas ajouter ici les dépendances envers les fichiers d'en-tête. On verra comment en tenir compte par la suite.
+
+~\\On construit maintenant la commande qui sera exécutée pour construire la cible. La variable « \texttt{rule.mCommand} » est une liste de chaînes de caractères, initialement vide.
+\begin{lstlisting}[language=py]
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+\end{lstlisting}
+Il est impératif de définir une chaîne par argument. Si par exemple on veut ajouter l'option « \texttt{-O2} », écrire \texttt{rule.mCommand.append ("gcc -O2")} est une erreur, il faut obligatoirement écrire \texttt{rule.mCommand += ["gcc", "-O2"]}.
+
+{\bf Note.}\label{verifUtilitaire} À partir de la version 2.2, l'existence de l'utilitaire appelé est vérifiée. Un message d'erreur est affiché si l'utilitaire n'est par trouvé ; par exemple, si on écrit \texttt{rule.mCommand.append ("gccc")}, alors le message d'erreur suivant s'affiche :
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{red}{\bf*** Cannot find~\textquotesingle gccc\textquotesingle~executable ***}
+\end{mdframed}
+
+~\\La construction de la règle est terminée ; on peut maintenant l'ajouter au makefile.
+\begin{lstlisting}[language=py]
+  make.addRule (rule)
+\end{lstlisting}
+
+
+~\\{\bf Récapitulation.} La construction des règles relatives à la compilation des sources C est :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  object = "objects/" + source + ".o"
+  objectList.append (object)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
+  rule.mDependences.append (source)
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+  make.addRule (rule)
+\end{lstlisting}
+Remarquez que les fichiers objets sont rangés dans le répertoire \texttt{objects}. Or celui-ci n'existe peut-être pas, et \texttt{gcc} ne le créera pas, en déclenchant une erreur si il n'existe pas. En fait, il est inutile de s'en soucier. En effet, quand une règle doit être exécutée, notre makefile crée implicitement le répertoire du fichier cible, si ce répertoire n'existe pas.
+
+~\\On va maintenant construire la règle relative à l'édition des liens. Le nom du fichier exécutable est défini par la variable \texttt{product}, et les dépendances sont les fichiers objets dont la liste est définie par la variable \texttt{objectList}.
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule ([product], "Linking " + product) # Release 2
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+make.addRule (rule)
+\end{lstlisting}
+
+~\\À titre de vérification, il est possible d'afficher les règles.
+\begin{lstlisting}[language=py]
+make.printRules ()
+\end{lstlisting}
+
+Les trois règles que nous avons définies s'affichent :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf{-}{-}{-} Print 3 rules {-}{-}{-}}\\
+\textcolor{OliveGreen}{\bf Target: "objects/main.c.o"}\\
+\hspace*{1.2em}Dependence: "main.c"\\
+\hspace*{1.2em}Command:  "gcc" "-c" "main.c" "-o" "objects/main.c.o"\\
+\hspace*{1.2em}Title: "Compiling main.c"\\
+\textcolor{OliveGreen}{\bf Target: "objects/myRoutine.c.o"}\\
+\hspace*{1.2em}Dependence: "myRoutine.c"\\
+\hspace*{1.2em}Command:  "gcc" "-c" "myRoutine.c" "-o" "objects/myRoutine.c.o"\\
+\hspace*{1.2em}Title: "Compiling myRoutine.c"\\
+\textcolor{OliveGreen}{\bf Target: "myRoutine"}\\
+\hspace*{1.2em}Dependence: "objects/main.c.o"\\
+\hspace*{1.2em}Dependence: "objects/myRoutine.c.o"\\
+\hspace*{1.2em}Command:  "gcc" "objects/main.c.o" "objects/myRoutine.c.o" "-o" "myRoutine"\\
+\hspace*{1.2em}Title: "Linking myRoutine"\\
+\textcolor{blue}{\bf{-}{-}{-} End of print rule {-}{-}{-}}
+\end{mdframed}
+
+~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet (on verra plus loin comment le configurer). Dans le cadre de notre exemple, nous allons définir deux buts :
+\begin{itemize}
+  \item \texttt{all}, qui commande la construction de l'exécutable (celui qui a été mentionné dans l'instanciation de la classe \texttt{Make}) ;
+  \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens (inutilisé pour l'instant).
+\end{itemize}
+
+\begin{lstlisting}[language=py]
+make.addGoal ("all", [product], "Building all")
+make.addGoal ("compile", objectList, "Compile C files")
+\end{lstlisting}
+Chaque but est défini par trois arguments :
+\begin{itemize}
+\item son nom, qui sert par la suite pour le désigner ;
+\item la liste des fichiers qu'il construit ;
+\item sa description, sous la forme d'une chaîne de caractères.
+\end{itemize}
+
+~\\À titre de vérification, nous pouvons afficher la liste des buts.
+\begin{lstlisting}[language=py]
+make.printGoals ()
+\end{lstlisting}
+
+On obtient :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf{-}{-}{-} Print 2 goals {-}{-}{-}}\\
+\textcolor{OliveGreen}{\bf Goal: "compile"}\\
+\hspace*{1.2em}Target: "objects/main.c.o"\\
+\hspace*{1.2em}Target: "objects/myRoutine.c.o"\\
+\hspace*{1.2em}Message: "Compile C files"\\
+\textcolor{OliveGreen}{\bf Goal: "all"}\\
+\hspace*{1.2em}Target: "myRoutine"\\
+\hspace*{1.2em}Message: "Building all"\\
+\textcolor{blue}{\bf{-}{-}{-} End of print goal {-}{-}{-}}
+\end{mdframed}
+
+~\\Enfin, nous allons ordonner la construction du but qui a été désigné lors de l'instanciation de la classe \texttt{Make}, c'est-à-dire le but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
+
+\begin{lstlisting}[language=py]
+make.runGoal (0, False)
+\end{lstlisting}
+
+
+Cet appel contient deux arguments :
+\begin{itemize}
+\item une valeur entière qui précise combien de règles peuvent être exécutées en parallèle ;
+  \begin{itemize}
+  \item une valeur strictement positive définit le nombre de règles qui peuvent être exécutées en parallèle ; en particulier, la valeur $1$ impose une exécution séquentielle des règles ;
+  \item la valeur $0$ indique au makefile de prendre le nombre de processeurs de la machine sur laquelle tourne le script ;
+  \item la valeur strictement négative indique au makefile de prendre le nombre de processeurs de la machine sur laquelle tourne le script, auquel on ajoute l'opposé de la valeur ; par exemple, $-2$ sur un quadri-cœur définit l'exécution de $4-(-2)=6$ règles en parallèle ;
+  \end{itemize}
+\item une valeur booléenne qui indique si la commande relative à chaque règle doit être affichée ou non ; le titre de chaque règle est toujours affiché.
+\end{itemize}
+
+L'exécution du script affiche  (noter la création du répertoire \texttt{objects}) :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Making "objects" directory}\\
+$[$~33\%]~\textcolor{blue}{\bf Compiling main.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$100\%]~\textcolor{blue}{\bf Linking myRoutine}
+\end{mdframed}
+
+{\bf Nouveau dans la version 2.3.}\label{affichagePourcentage} Le pourcentage qui est affiché représente le pourcentage de commandes réalisées lorsque la commande citée sur la même ligne sera terminée. Si $N$ commandes doivent être executées, pour la $i$\up{e}  commande ($1 \leqslant i \leqslant N$) la valeur affichée est $100 \times i / N$. Aussi, la dernière commande est toujours précédée de « \texttt{[100\%]} ».
+
+Si on ne veut pas afficher cette information, il suffit d'appeller la méthode \texttt{doNotShowProgressString} de la classe \texttt{Make} avant d'appeler \texttt{runGoal} :
+
+\begin{lstlisting}[language=py]
+make.runGoal (0, False)
+make.doNotShowProgressString ()
+\end{lstlisting}
+
+
+
+
+
+Si on relance aussitôt le script, le makefile examine les dépendances et signale qu'il n'y a rien à construire :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Nothing to make.}
+\end{mdframed}
+
+
+
+~\\Appeler \texttt{runGoal} avec le dernier argument à \texttt{True} permet d'afficher les commandes qui sont exécutées :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Making "objects" directory}\\
+mkdir -p objects\\
+$[$~33\%]~\textcolor{blue}{\bf Compiling main.c}\\
+gcc -c main.c -o objects/main.c.o\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+gcc -c myRoutine.c -o objects/myRoutine.c.o\\
+$[$100\%]~\textcolor{blue}{\bf Linking myRoutine}\\
+gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
+\end{mdframed}
+
+~\\Si une erreur est détectée, par exemple si l'exécution d'une règle échoue par suite d'une erreur de compilation, l'exécution de \texttt{runGoal} attend la fin de toutes les exécutions parallèles pour terminer. Pour afficher les erreurs et abandonner l'exécution du script en retournant un code d'erreur, on peut appeler :
+\begin{lstlisting}[language=py]
+make.printErrorCountAndExitOnError ()
+\end{lstlisting}
+L'appel de cette méthode n'a aucun effet si il n'y a pas d'erreur.
+
+\section{Dépendance des fichiers d'en-tête}
+
+
+Dans les écritures précédentes, nous n'avions pas pris en compte les dépendances envers les fichiers d'en-tête pour la compilation des sources C. Dans l'exemple, ces dépendances sont très simples, il n'y a qu'un seul fichier d'en-tête utilisateur : \texttt{myRoutine.h}. On pourrait ajouter ce fichier dans la liste de dépendances définie par \texttt{rule.mDependences}.
+
+Mais dans un cas réel, cela impose de maintenir soi-même la liste des dépendances de chaque fichier source. Or, en fonction de l'évolution du programme, cette liste peut évoluer : des fichiers d'en-tête peuvent s'avérer inutiles, d'autres peuvent être oubliés. Il est donc beaucoup plus simple et plus sûr de confier cette tâche à GCC et au makefile Python.
+
+Maintenir automatiquement les dépendances envers les fichiers d'en-tête s'effectue en trois étapes.
+
+D'abord nommer le fichier de fichier de dépendance : on choisit le nom du fichier objet, auquel on ajoute l'extension \texttt{dep}. Ce fichier sera placé dans le répertoire \texttt{objects}.
+\begin{lstlisting}[language=py]
+  depObject = object + ".dep"
+\end{lstlisting}
+
+Ensuite, indiquer à GCC de le construire ; on ajoute les options de compilations suivantes :
+\begin{lstlisting}[language=py]
+  rule.mCommand += ["-MD", "-MP", "-MF", depObject]
+\end{lstlisting}
+
+Enfin, on ajoute à la règle la dépendance en ce fichier (il faut placer l'instance de la classe \texttt{Make} en second argument) :
+\begin{lstlisting}[language=py]
+  rule.enterSecondaryDependanceFile (depObject, make)
+\end{lstlisting}
+
+
+~\\{\bf Récapitulation.} Les règles de compilation des sources C deviennent donc :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  object = "objects/" + source + ".o"
+  depObject = object + ".dep"
+  objectList.append (object)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
+  rule.mDependences.append (source)
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+  rule.mCommand += ["-MD", "-MP", "-MF", depObject]
+  rule.enterSecondaryDependanceFile (depObject, make)
+  make.addRule (rule)
+\end{lstlisting}
+
+Maintenant, toute modification d'un fichier d'en-tête provoquera la compilation des fichiers sources qui l'incluent directement ou indirectement. C'est une dépendance dite \emph{secondaire} car l'absence du fichier n'empêche pas l'exécution de la règle. A contrario, l'absence du fichier source entraîne une erreur, car il n'y a aucun moyen de le construire.
+
+L'exécution de la méthode \texttt{enterSecondaryDependanceFile} peut prendre un temps important, puisque la date de modification de tous les fichiers cités dans le fichier \texttt{depObject} est vérifiée. Toutefois, si le but \texttt{clean} est invoqué, cette interrogation n'est pas réalisée car inutile : la durée d'exécution de la méthode est alors négligeable.
+
+
+
+
+
+
+\section{Priorité entre les règles}
+
+Par défaut, les règles qui sont prêtes à être exécutées le sont dans leur ordre d'ajout par la méthode \texttt{addRule}. Ainsi, dans notre exemple, on a définit la liste des fichiers sources par :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+\end{lstlisting}
+Si on exécute les règles séquentiellement (appel de \texttt{runGoal} avec le deuxième argument égal à $1$), \texttt{main.c} sera toujours compilé avant \texttt{myRoutine.c}.
+
+On peut changer cet ordre en affectant une priorité à une règle : il suffit de changer la valeur du champ entier \texttt{mPriority} de la règle. Par défaut, ce champ est à zéro. On peut affecter une valeur positive, négative ou nulle, du moment qu'elle est entière. Plus ce champ a une valeur importante, plus la règle est prioritaire. À priorité égale, c'est l'ordre d'insertion des règles (par la méthode \texttt{addRule}) qui définit l'ordre : la première insérée sera exécutée d'abord.
+
+Par exemple, on peut demander à compiler les fichiers dans l'ordre décroissant de leur taille. Pour cela on écrira (juste avant l'appel de \texttt{addRule}) :
+\begin{lstlisting}[language=py]
+  rule.mPriority = os.path.getsize (scriptDir + "/" + source)
+\end{lstlisting}
+
+
+
+
+
+
+
+\section{Prise en compte de plusieurs buts}
+
+Nous avons défini le but \texttt{compile}, mais sans l'avoir appelé jusqu'à présent. Nous allons voir comment nous pouvons écrire un nouveau script Python qui va appeler ce but.
+
+D'abord, nous modifions le début du script \texttt{build.py} de la façon suivante :
+\begin{lstlisting}[language=py]
+#--- Get goal as first argument
+goal = "all"
+if len (sys.argv) > 1 :
+  goal = sys.argv [1]
+#--- Get max parallel jobs
+maxParallelJobs = 0 # 0 means use host processor count
+if len (sys.argv) > 2 :
+  maxParallelJobs = int (sys.argv [2])
+#--- Build python makefile
+make = makefile.Make (goal, maxParallelJobs == 1)
+\end{lstlisting}
+
+{\bf Note.}\label{logUtilityToolPath2} À partir de la version 2.2, \texttt{makefile.Make} présente un second argument booléen optionnel.  Si il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux. En plaçant \texttt{maxParallelJobs == 1} comme second argument, on affiche ce chemin si la construction des buts est réalisée séquentiellement, sans parallélisme.
+
+Ensuite, nous modifions la fin du script \texttt{build.py} de la façon suivante :
+\begin{lstlisting}[language=py]
+make.runGoal (maxParallelJobs, maxParallelJobs == 1)
+\end{lstlisting}
+
+Ces modifications permettent d'appeler ce script avec différents arguments, ce qui permet de préciser le but et le parallélisme.
+
+~\\Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilation, s'écrit :
+\lstinputlisting[language=py]{../../compile.py}
+
+
+~\\Autre exemple : le script \texttt{verbose-build.py} effectue une compilation fichier par fichier, ce qui clarifie l'affichage des erreurs, en effet, la compilation parallèle peut provoquer l'affichage entrelacé des messages d'erreurs, les rendant difficilement compréhensibles.
+\lstinputlisting[language=py]{../../verbose-build.py}
+
+
+
+
+
+
+
+\section{Post commandes}
+
+Il est possible d'ajouter à une règle des \emph{post commandes} qui sont exécutées les unes après les autres à la suite l'exécution de la commande associée. Un exemple typique est l'application de l'utilitaire \texttt{strip} sur l'exécutable produit par le linker.
+
+On ne peut pas écrire une règle ordinaire, car le fichier de dépendance est le même que le fichier cible.
+
+~\\Pour définir une \emph{post commande}, on commence par instancier un nouvel objet de type \texttt{PostCommand} :
+\begin{lstlisting}[language=py]
+postCommand = makefile.PostCommand ("Stripping " + product)
+\end{lstlisting}
+En argument, figure le titre qui sera affiché lors de l'exécution de la post commande.
+
+~\\On ajoute ensuite la commande qui doit être exécutée :
+\begin{lstlisting}[language=py]
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
+\end{lstlisting}
+
+~\\Enfin, on ajoute la \emph{post commande} à la liste des post commandes de la règle :
+\begin{lstlisting}[language=py]
+rule.mPostCommands.append (postCommand)
+\end{lstlisting}
+
+
+~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule ([product], "Linking " + product) # Release 2
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+L'exécution du script affiche maintenant:
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\tt\footnotesize
+\textcolor{blue}{\bf Making "objects" directory}\\
+$[$~33\%]~\textcolor{blue}{\bf Compiling main.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$100\%]~\textcolor{blue}{\bf Linking myRoutine}\\
+\textcolor{blue}{\bf Stripping myRoutine}
+\end{mdframed}
+
+
+
+
+
+
+
+\section{Suppression des cibles en cas d'erreur}
+
+En cas d'erreur d'exécution d'une commande (par exemple due à une erreur de compilation), le fichier exécutable, si il existe, n'est pas supprimé : on a alors un exécutable qui ne correspond pas à l'état de compilation du programme.
+
+Il est très simple d'ordonner la suppression de l'exécutable lors d'une erreur d'exécution d'une commande. Il suffit de mettre l'attribut \texttt{mDeleteTargetOnError} de la règle qui définit l'édition de liens à \texttt{True} :
+\begin{lstlisting}[language=py]
+rule.mDeleteTargetOnError = True
+\end{lstlisting}
+Cette technique peut être utilisée pour toute cible.
+
+~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule ([product], "Linking " + product)  # Release 2
+rule.mDeleteTargetOnError = True
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+
+
+
+
+
+
+\section{Le but \texttt{clean}}
+
+Par défaut, le but \texttt{clean} est défini mais n'a aucun effet. Il est facile d'ajouter la suppression de fichiers et de répertoires lorsque le but \texttt{clean} est exécuté.
+
+Dans notre exemple, nous voulons que l'exécution du but \texttt{clean} supprime :
+\begin{itemize}
+  \item le fichier exécutable ;
+  \item le répertoire contenant les fichiers objets engendrés.
+\end{itemize}
+
+~\\Pour supprimer le fichier exécutable lors de l'exécution du but \texttt{clean}, il suffit d'ajouter à la règle définissant l'édition des liens :
+
+\begin{lstlisting}[language=py]
+rule.deleteTargetFileOnClean ()
+\end{lstlisting}
+
+
+~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+\begin{lstlisting}[language=py]
+product = "myRoutine"
+rule = makefile.Rule ([product], "Linking " + product)  # Release 2
+rule.deleteTargetFileOnClean ()
+rule.mDeleteTargetOnError = True
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+
+~\\Pour supprimer le répertoire \texttt{objects} lors de l'exécution du but \texttt{clean}, il suffit d'ajouter à la règle définissant la compilation des sources C :
+
+\begin{lstlisting}[language=py]
+  rule.deleteTargetDirectoryOnClean ()
+\end{lstlisting}
+
+~\\{\bf Récapitulation.} Les règles de compilation des sources C deviennent donc :
+\begin{lstlisting}[language=py]
+sourceList = ["main.c", "myRoutine.c"]
+objectList = []
+for source in sourceList:
+  object = "objects/" + source + ".o"
+  depObject = object + ".dep"
+  objectList.append (object)
+  rule = makefile.Rule ([object], "Compiling " + source) # Release 2
+  rule.deleteTargetDirectoryOnClean ()
+  rule.mDependences.append (source)
+  rule.mCommand.append ("gcc")
+  rule.mCommand += ["-c", source]
+  rule.mCommand += ["-o", object]
+  rule.mCommand += ["-MD", "-MP", "-MF", depObject]
+  rule.enterSecondaryDependanceFile (depObject, make)
+  rule.mPriority = os.path.getsize (scriptDir + "/" + source)
+  make.addRule (rule)
+\end{lstlisting}
+
+~\\Il suffit maintenant d'ajouter le script \texttt{clean.py}, qui appelle le but \texttt{clean} :
+\lstinputlisting[language=py]{../../clean.py}
+
+
+\subsection{Simulation du but \texttt{clean}}\label{simulationButClean}
+
+À partir de la version 2.1, il est possible d'afficher sans les exécuter les commandes lancées par le but \texttt{clean}. Pour cela, il suffit d'appeler la méthode \texttt{simulateClean}.
+
+\begin{lstlisting}[language=py]
+  make.simulateClean ()
+\end{lstlisting}
+
+Cette méthode doit être appelée avant l'appel de \texttt{make.runGoal} pour être prise en compte.
+
+
+
+\section{Ouverture automatique d'un source sur erreur}
+
+Il est possible de programmer l'ouverture automatique avec un éditeur externe d'un fichier source quand une erreur se déclenche. Il suffit d'ajouter aux règles concernées la ligne :
+\begin{lstlisting}[language=py]
+  rule.mOpenSourceOnError = True
+\end{lstlisting}
+
+
+Nous allons commencer par provoquer une erreur de compilation en insérant un caractère « \S » à la 3\up{e} ligne du fichier \texttt{myRoutine.h} :
+\begin{lstlisting}[mathescape,language=C]
+#ifndef MYROUTINE_DEFINED
+#define MYROUTINE_DEFINED
+$\S$
+void myRoutine (void) ;
+
+#endif
+\end{lstlisting}
+
+Si on relance la compilation, l'erreur est détectée (sur un multi-cœur, les deux compilations ont lieu en parallèle) :
+
+\begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
+\noindent\texttt{\footnotesize
+$[$~33\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
+$[$~66\%]~\textcolor{blue}{\bf Compiling main.c}\\
+In file included from main.c:1:\\
+In file included from myRoutine.c:1:\\
+./myRoutine.h:3:1: error: non-ASCII characters are not allowed outside of literals and identifiers\\
+\S\\
+\^\\
+1 error generated.\\
+./myRoutine.h:3:1: error: non-ASCII characters are not allowed outside of literals and identifiers\\
+\S\\
+\^\\
+1 error generated.\\
+\textcolor{red}{\bf Return code: 1}\\
+Wait for job termination...\\
+\textcolor{red}{\bf 1 error.}
+}
+\end{mdframed}
+
+Quand la propriété \texttt{mOpenSourceOnError} est vraie et en cas d'erreur, le makefile recherche dans le flux de sortie des commandes ayant provoqué une erreur un nom de fichier en début de ligne. Plus précisément, on se base sur la chaîne qui précède la première occurrence du caractère « : ». Cette recherche fournit quatre réponses :
+\begin{itemize}
+\item \colorbox{lightgray!20}{\tt In file included from main.c}
+\item \colorbox{lightgray!20}{\tt Compiling main.c}
+\item \colorbox{lightgray!20}{\tt ./myRoutine.h}
+\item \colorbox{lightgray!20}{\tt ./myRoutine.h}
+\end{itemize}
+
+Les deux premières réponses ne correspondent pas à un fichier existant, elles sont ignorées. Les deux suivantes provoquent l'ouverture du fichier \texttt{./myRoutine.h} avec un éditeur externe, qui est par défaut :
+\begin{itemize}
+\item sur Mac : \texttt{TextEdit} ;
+\item sur Linux : \texttt{gEdit}.
+\end{itemize}
+
+Il est facile de changer l'éditeur de texte par défaut, il suffit d'affecter les propriétés suivantes de l'objet \texttt{make} :
+\begin{itemize}
+\item pour Mac : \texttt{mMacTextEditor} ;
+\item pour Linux : \texttt{mLinuxTextEditor}.
+\end{itemize}
+
+Par exemple, pour que l'éditeur \texttt{TextWrangler} soit utilisé sur Mac :
+\begin{lstlisting}[language=Py]
+make.mMacTextEditor = "TextWrangler"
+\end{lstlisting}
+
+
+
+
+
+\section{Définition de plusieurs cibles à une règle}\label{plusieursCibles}
+
+Avec la version 2, plusieurs fichiers cibles peuvent être construis par l'exécution d'une règle. À titre d'exemple, nous allons modifier la règle d'édition de liens pour construire un fichier texte « map » qui contient la carte mémoire de l'exécutable. Trois modifications sont apportées dans le listing ci-dessus (notées \texttt{note1}, \texttt{note2} et \texttt{note3}).
+
+\begin{lstlisting}[language=Py]
+product = "myRoutine"
+mapFile = product + ".map" # note1
+rule = makefile.Rule ([product, mapFile], "Linking " + product) # Release 2, note2
+rule.mDeleteTargetOnError = True
+rule.deleteTargetFileOnClean ()
+rule.mDependences += objectList
+rule.mCommand += ["gcc"]
+rule.mCommand += objectList
+rule.mCommand += ["-o", product]
+rule.mCommand += ["-Wl,-map," + mapFile] # note3
+postCommand = makefile.PostCommand ("Stripping " + product)
+postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
+rule.mPostCommands.append (postCommand)
+make.addRule (rule)
+\end{lstlisting}
+
+{\bf note1.} Le nouveau fichier cible \texttt{mapFile} est défini ici.
+
+{\bf note2.} Il est ajouté à la liste des cibles construites par la règle.
+
+{\bf note3.} La commande est complétée pour construire le nouveau fichier cible.
+\\~
+
+En exécutant le but \texttt{all}, les deux fichiers \texttt{myRoutine} et \texttt{myRoutine.map} sont construits. Si on supprime l'un des deux fichiers, exécuter le but \texttt{all} le reconstruit. Si on commente la construction du fichier \texttt{myRoutine.map} (ligne commentée par \texttt{note3}), exécuter le but \texttt{all} affiche une alerte indiquant que le fichier n'a pas été construit.
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Le script complet \texttt{build.py}}
+
+\lstinputlisting[language=py]{../../build.py}
+
+
+
+
+
+
+
+
+
+
+\section{Autres fonctions}
+
+\subsection{Impression en couleur}
+
+Le module \texttt{makefile} définit les fonctions suivantes qui permettent d'effectuer des impressions en couleur :
+\begin{itemize}
+  \item \texttt{BLACK()}, \texttt{RED()}, \texttt{GREEN()}, \texttt{YELLOW()}, \texttt{BLUE()}, \texttt{MAGENTA()}, \texttt{CYAN()}, \texttt{WHITE()};
+  \item \texttt{BOLD()}, \texttt{BLINK()}, \texttt{UNDERLINE()} ;
+  \item \texttt{ENDC()}, qui remet à zéro les attributs d'impression.
+\end{itemize}
+Toutes ces fonctions retournent une chaîne de caractères que l'on peut directement utiliser dans un \texttt{print} :
+\begin{lstlisting}[language=py]
+print makefile.RED () + makefile.BOLD () + "Erreur !" + makefile.ENDC ()
+\end{lstlisting}
+
+
+\subsection{La méthode \texttt{enterError}}
+
+La méthode \texttt{enterError} de la classe \texttt{Make} permet d'afficher un message d'erreur et d'incrémenter le compteur d'erreurs maintenu par le récepteur. Elle présente un argument chaîne de caractères, qui est imprimé en rouge et en gras sur le terminal.
+\begin{lstlisting}[language=py]
+make.enterError ("il y a une erreur quelque part !")
+\end{lstlisting}
+Rappelons qu'un compteur d'erreur non nul inhibe l'exécution des règles lorsque \texttt{runGoal} est invoqué.
+
+
+\subsection{La méthode \texttt{errorCount}}
+
+La méthode \texttt{errorCount} de la classe \texttt{Make} retourne la valeur courante du compteur d'erreurs maintenu par le récepteur.
+\begin{lstlisting}[language=py]
+nombre_erreurs = make.errorCount ()
+\end{lstlisting}
+
+
+\subsection{La méthode \texttt{printErrorCount}}
+
+La méthode \texttt{printErrorCount} de la classe \texttt{Make} imprime la valeur courante du compteur d'erreurs maintenu par le récepteur si celle-ci est non nulle. Si elle est nulle, rien n'est imprimé.
+\begin{lstlisting}[language=py]
+make.printErrorCount ()
+\end{lstlisting}
+
+
+\subsection{Recherche d'un fichier dans une arborescence}
+
+La méthode \texttt{searchFileInDirectories} de la classe \texttt{Make} recherche un fichier dans une liste de répertoires :
+\begin{lstlisting}[language=py]
+chemin = make.searchFileInDirectories (fichier, liste_de_repertoires)
+\end{lstlisting}
+Où :
+\begin{itemize}
+  \item \texttt{fichier} est une chaîne de caractères qui définit le nom du fichier recherché ;
+  \item \texttt{liste\_de\_repertoires} est une liste de chaînes de caractères qui définit la liste des répertoires dans lesquels le fichier sera recherché ;
+\end{itemize}
+La fonction retourne :
+\begin{itemize}
+  \item si \texttt{fichier} est trouvé exactement une fois, le nom du fichier préfixé par le nom du répertoire qui contient le fichier ;
+  \item la chaîne vide si le fichier n'est pas trouvé, ou si il est trouvé plusieurs fois ; un message d'erreur est alors affiché, et le compteur d'erreur maintenu par le récepteur est incrémenté.
+\end{itemize}
+
+Rappelons qu'un compteur d'erreur non nul inhibe l'exécution des règles lorsque \texttt{runGoal} est invoqué.
+
+
+%-----------------------------------------------------------------------------------------------------------------------*
+%   F I N    D U    D O C U M E N T                                                                                     *
+%-----------------------------------------------------------------------------------------------------------------------*
+
+\end{document}

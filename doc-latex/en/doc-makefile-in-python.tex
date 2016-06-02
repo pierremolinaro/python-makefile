@@ -21,7 +21,7 @@
 \usepackage{lmodern}
 
 %--- Paquetage pour imposer les réglages français
-\usepackage[frenchb]{babel}
+%\usepackage[frenchb]{babel}
 
 %------------------------------------------------------------------------------------------------
 %   C H O I X    D E    L A    P O L I C E
@@ -132,7 +132,7 @@
 %--- Pour les hyperliens, et le contrôle de la génération PDF 
 \usepackage[pagebackref]{hyperref}
 
-\hypersetup{pdftitle      = {Piccolo}}
+\hypersetup{pdftitle      = {Python makefile}}
 \hypersetup{pdfauthor     = {Pierre Molinaro}}
 
 \hypersetup{colorlinks    = true}
@@ -171,7 +171,7 @@
 %                                                                                                                       *
 %-----------------------------------------------------------------------------------------------------------------------*
 
-\title{\bf \Huge{Makefiles en Python\\Version 3.0}}
+\title{\bf \Huge{Python Makefile\\Version 3.0}}
 \author{Pierre Molinaro}
 \date {30 mai 2016}
 
@@ -194,49 +194,50 @@
 \section{Versions}
   \begin{tabular}{llp{10.5cm}}
     \textbf{Version} & \textbf{Date} & \textbf{Commentaire}\\
-    1.0 & 4 mars 2015 & Version initiale \\
-    2.0 & 2 octobre 2015 & Définition de plusieurs cibles pour une règle (exemple page \pageref{plusieursCibles})\\
-    2.1 & 5 octobre 2015 & Ajout de la vérification dynamique des types des arguments\\
-        &                & Ajout de la simulation du but \texttt{clean} (page \pageref{simulationButClean})\\
-    2.2 & 24 octobre 2015 & Remplacement de \texttt{subprocess.Popen} en \texttt{subprocess.call} dans \texttt{runCommand}\\
-        &                & Ajout de la vérification de l'existence de l'utilitaire appelé dans les commandes par la fonction \texttt{find\_executable} (voir la note page \pageref{verifUtilitaire})\\
-        &                & Ajout d'un argument booléen optionnel à l'instanciation d" la classe \texttt{Make} pour afficher le chemin complet de l'utilitaire appelé dans les commandes (voir les notes pages \pageref{logUtilityToolPath} et \pageref{logUtilityToolPath2})\\
-    2.3 & 16 avril 2016 & Ajout de l'affichage du pourcentage de la progression (voir page \pageref{affichagePourcentage})\\
-    3.0 & 30 mai 2016 & Compatibilité avec Python 3 : le script peut être utiliséaussi bien en Python 2 qu'en Python 3\\
+    1.0 & March 4, 2015 & Initial version \\
+    2.0 & October 2, 2015 & Definition of more than one target for a rule (exemple at page \pageref{plusieursCibles})\\
+    2.1 & October 5, 2015 & Added a dynamic checking of arguments type\\
+        &                & Added a simulation of the \texttt{clean} target (page \pageref{simulationButClean})\\
+    2.2 & October 24, 2015 & Replaced \texttt{subprocess.Popen} by \texttt{subprocess.call} in \texttt{runCommand}\\
+        &                & Checks external tools exist by using the \texttt{find\_executable} function (see note on page \pageref{verifUtilitaire})\\
+        &                & Added an optional boolean argument in \texttt{Make} class constructor to display the complete path of external tools (see notes on pages \pageref{logUtilityToolPath} and \pageref{logUtilityToolPath2})\\
+    2.3 & April 16, 2016 & Added a progress bar display (see page \pageref{affichagePourcentage})\\
+    3.0 & May 30, 2016 & Python 3 compatibility: the script can be used with Python 2 and Python 3\\
   \end{tabular}
 \\~
 
-
-La version 2.0 apporte une incompatiblité avec les scripts de la version précédente. Le premier argument de \texttt{makefile.Rule} doit être une liste. Les lignes modifiées des listings sont complétées par le commentaire « \texttt{\# Release 2} ».
+Version 2.0 breaks previous versions scripts. The first argument of \texttt{makefile.Rule} must be a list. The lines modified to be compatible with version 2.0 and higher are commented with "\texttt{\# Release 2}".
 
 %Le chapitre \hyperref[plusieursCibles]{page \pageref{plusieursCibles}} donne 
 
 \section{Introduction}
 
-Le module \texttt{makefile} permet de construire facilement des scripts Python qui ont toutes les facilités des fichiers \emph{makefile} exécutés par l'utilitaire \texttt{make}. Les avantages principaux de la classe \texttt{makefile} sont :
+The \texttt{makefile} module is designed to build easily Python scripts which are a replacement for traditional makefiles. The \texttt{makefile} class have many assets:
+
 \begin{itemize}
-  \item la description des règles de dépendances est beaucoup plus simple ;
-  \item les espaces dans un chemin sont pris en compte naturellement. 
+  \item Dependencies rules description is simpler;
+  \item Blanks in paths can be used freely;
+  \item A full featured programming langage. 
 \end{itemize}
 
-Dans la suite, nous allons donner un exemple d'utilisation de cette classe.
+In the following, we will give an example of usage of this class.
 
-\section{L'exemple}
+\section{An example}
 
-L'exemple consiste en deux fichiers C et un fichier d'en-tête.
+The example consists of two C files and a C header file.
 
-Le fichier \texttt{main.c} :
-\lstinputlisting[language=C]{../main.c}
-
-
-Le fichier \texttt{myRoutine.h} :
-\lstinputlisting[language=C]{../myRoutine.h}
+File \texttt{main.c} :
+\lstinputlisting[language=C]{../../main.c}
 
 
-Le fichier \texttt{myRoutine.c} :
-\lstinputlisting[language=C]{../myRoutine.c}
+File \texttt{myRoutine.h} :
+\lstinputlisting[language=C]{../../myRoutine.h}
 
-La compilation séparée s'effectue par les commandes :
+
+File \texttt{myRoutine.c} :
+\lstinputlisting[language=C]{../../myRoutine.c}
+
+Separate compilation is done by the commands:
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -247,35 +248,35 @@ gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
 \end{mdframed}
 
 
-Les fichiers objets sont rangés dans un répertoire \texttt{objects}, qu'il faut créer si il n'existe pas.
+The object files are stored in a directory \texttt{objects} that must be created if it does not exist.
 
 
-\section{Construction du script Python}
+\section{Construction of the Python script}
 
-Ce script est contenu dans un fichier exécutable \texttt{build.py}, situé dans le même répertoire que les fichiers sources C. Sa composition est décrite pas-à-pas.
+This script is contained in an executable file \texttt{build.py}, located in the same directory as the C source files. Its content is described step by step.
 
-~\\La première opération est d'importer le module \texttt{makefile}, ainsi que les autres modules utiles.
+~\\The first step is to import the module \texttt{makefile}, and other useful modules.
 \begin{lstlisting}[language=py]
 import sys, os, makefile
 \end{lstlisting}
 
-~\\Pour pouvoir travailler avec des chemins relatifs, on fixe le répertoire courant, obtenu à partir de l'argument $0$.
+~\\To work with relative paths, it sets the current directory, obtained from the argument $0$.
 \begin{lstlisting}[language=py]
 scriptDir = os.path.dirname (os.path.abspath (sys.argv[0]))
 os.chdir (scriptDir)
 \end{lstlisting}
 
-~\\Ensuite, on crée un objet \texttt{make}, qui est l'objet qui centralise la mise en œuvre de la construction. Un argument chaîne de caractères doit être fourni, il représente le but qui sera construit. La définition précise de ce but est faite plus loin.
+~\\Then we create an object \texttt{make}, which is the object that centralizes implementation of construction. A string argument must be provided, it is the goal to be built. The precise definition of this goal is made later.
 \begin{lstlisting}[language=py]
 make = makefile.Make ("all")
 \end{lstlisting}
 
-{\bf Note.}\label{logUtilityToolPath} À partir de la version 2.2, la création de l'objet \texttt{make} présente un second argument booléen optionnel. S'il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux.
+{\bf Note.}\label{logUtilityToolPath} From version 2.2, the creation of the \texttt{make} has an optional second Boolean argument. If it is true, calling each command displays the full path of the utility called. By default, this optional argument is false.
 \begin{lstlisting}[language=py]
-make = makefile.Make ("all", True) # Affiche le chemin de chaque commande appelee
+make = makefile.Make ("all", True) # Displays the path of each command called
 \end{lstlisting}
 
-~\\Pour présenter une solution générale, on construit deux listes, l'une contenant la liste des fichiers C à compiler, l'autre la liste des fichiers objets à lier. La seconde est initialement vide, elle est construite au fur et à mesure en bouclant sur la liste des fichiers source. 
+~\\To present a general solution, we build two lists, one containing the list of C files to compile, the other the list of object files to be linked. The second is initially empty, it is built by looping through the list of source files. 
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -283,45 +284,47 @@ for source in sourceList:
   ...
 \end{lstlisting}
 
-~\\Dans le corps de la boucle, on construit chaque règle correspondant à la compilation d'un fichier source. On commence par définir le fichier \emph{cible} de la règle, qui est ici le fichier objet construit par la compilation du source C. On en profite pour accumuler dans \texttt{objectList} la liste des fichiers objet.
+~\\In the body of the loop, we construct each rule corresponding to the compilation of a source file. We begin by defining the \emph{target} of the rule, which is here the object file built by compiling the source C. We also want to collect in \texttt{ObjectList}  the list of object files.
 \begin{lstlisting}[language=py]
   object = "objects/" + source + ".o"
   objectList.append (object)
 \end{lstlisting}
 
-~\\Ensuite, on instancie un objet \texttt{rule} en précisant en premier argument la liste des fichiers cibles de la règle. Le second argument est optionnel, il s'agit du titre qui est affiché lors de l'exécution de la règle. Par défaut, en l'absence du second argument, le texte \texttt{Building} suivi du nom des cibles est affiché. 
+~\\Then we instantiate an object \texttt{rule}  specifying as first argument the list of target files of the rule. The second argument is optional, it is the title that is displayed when running the rule. By default, without the second argument, the text \texttt{Building}  followed by the name of the target is displayed.
 \begin{lstlisting}[language=py]
   rule = makefile.Rule ([object], "Compiling " + source)  # Release 2
 \end{lstlisting}
-Attention, la cible (ici « [\texttt{object}] ») doit être obligatoirement une liste de fichiers. On ne peut pas mettre un nom tel que \texttt{all} ou \texttt{clean} ici : ces noms sont des \emph{buts} et leur définition est décrite plus loin dans ce document.
+Please note that the target (here "[\texttt{object}]") must be a list of files. You can not put a name such as \texttt{all} or \texttt{clean} here: these names are \emph{goals} and their definition is described later in this document.
 
-~\\On ajoute ensuite les dépendances. Ici, il n'y a qu'une seule dépendance, le fichier source.La variable \texttt{rule.mDependences} est une liste de chaînes de caractères, initialement vide.
+~\\Then dependencies are added. Here there is only one dependency, the source file. The variable \texttt{rule.mDependences} is a list of strings, initially empty.
 \begin{lstlisting}[language=py]
   rule.mDependences.append (source)
 \end{lstlisting}
-Attention, ne pas ajouter ici les dépendances envers les fichiers d'en-tête. On verra comment en tenir compte par la suite.
+Caution, do not add here the dependencies to the header files. We will see how to take them into account later.
 
-~\\On construit maintenant la commande qui sera exécutée pour construire la cible. La variable « \texttt{rule.mCommand} » est une liste de chaînes de caractères, initialement vide.
+~\\We now construct the command to be executed to build the target. The "\texttt{rule.mCommand}" variable is a list of strings, initially empty.
 \begin{lstlisting}[language=py]
   rule.mCommand.append ("gcc")
   rule.mCommand += ["-c", source]
   rule.mCommand += ["-o", object]
 \end{lstlisting}
-Il est impératif de définir une chaîne par argument. Si par exemple on veut ajouter l'option « \texttt{-O2} », écrire \texttt{rule.mCommand.append ("gcc -O2")} est une erreur, il faut obligatoirement écrire \texttt{rule.mCommand += ["gcc", "-O2"]}.
+It is essential to define a string for each argument. If for example we want to add the "\texttt{-O2}" option, writing \texttt{rule.mCommand.append("gcc -O2")} is a mistake, it is mandatory to write \texttt{rule.mCommand += ["gcc", "-O2"]}.
 
-{\bf Note.}\label{verifUtilitaire} À partir de la version 2.2, l'existence de l'utilitaire appelé est vérifiée. Un message d'erreur est affiché si l'utilitaire n'est par trouvé ; par exemple, si on écrit \texttt{rule.mCommand.append ("gccc")}, alors le message d'erreur suivant s'affiche :
+{\bf Note.}\label{verifUtilitaire}
+From version 2.2, the existence of the tool called is verified. An error message is displayed if the tool is not found; For example, if you write \texttt{rule.mCommand.append("gccc")}, then the following error message is displayed:
+
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
 \textcolor{red}{\bf*** Cannot find~\textquotesingle gccc\textquotesingle~executable ***}
 \end{mdframed}
 
-~\\La construction de la règle est terminée ; on peut maintenant l'ajouter au makefile.
+~\\The construction of the rule is complete; we can now add it to the Makefile.
 \begin{lstlisting}[language=py]
   make.addRule (rule)
 \end{lstlisting}
 
 
-~\\{\bf Récapitulation.} La construction des règles relatives à la compilation des sources C est :
+~\\{\bf To summarize.} The construction of the rules governing the building from the C sources is:
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -335,9 +338,9 @@ for source in sourceList:
   rule.mCommand += ["-o", object]
   make.addRule (rule)
 \end{lstlisting}
-Remarquez que les fichiers objets sont rangés dans le répertoire \texttt{objects}. Or celui-ci n'existe peut-être pas, et \texttt{gcc} ne le créera pas, en déclenchant une erreur si il n'existe pas. En fait, il est inutile de s'en soucier. En effet, quand une règle doit être exécutée, notre makefile crée implicitement le répertoire du fichier cible, si ce répertoire n'existe pas.
+Note that the object files are stored in the \texttt{objects}. Maybe it does not exist, and \texttt{gcc} will not create it, triggering an error if it does not exist. In fact, there is no need to worry about it. Indeed, when a rule is to be enforced, our makefile implicitly creates the target file directory, if this directory does not exist.
 
-~\\On va maintenant construire la règle relative à l'édition des liens. Le nom du fichier exécutable est défini par la variable \texttt{product}, et les dépendances sont les fichiers objets dont la liste est définie par la variable \texttt{objectList}.
+~\\We will now build the rule related to the linking. The name of the executable file is defined by the variable \texttt{product}, and dependancies are object files listed in the variable \texttt{ObjectList}.
 \begin{lstlisting}[language=py]
 product = "myRoutine"
 rule = makefile.Rule ([product], "Linking " + product) # Release 2
@@ -348,12 +351,12 @@ rule.mCommand += ["-o", product]
 make.addRule (rule)
 \end{lstlisting}
 
-~\\À titre de vérification, il est possible d'afficher les règles.
+~\\As a check, it is possible to display the rules.
 \begin{lstlisting}[language=py]
 make.printRules ()
 \end{lstlisting}
 
-Les trois règles que nous avons définies s'affichent :
+The three rules we have set are displayed:
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -374,29 +377,29 @@ Les trois règles que nous avons définies s'affichent :
 \textcolor{blue}{\bf{-}{-}{-} End of print rule {-}{-}{-}}
 \end{mdframed}
 
-~\\Nous allons maintenant définir les buts (« \emph{goals} »). Par défaut, il y a un but nommé \texttt{clean}, qui n'a par défaut aucun effet (on verra plus loin comment le configurer). Dans le cadre de notre exemple, nous allons définir deux buts :
+~\\We now define goals ("\emph{goals}"). By default, there is a goal named \texttt{clean}, which has no effect (later we will see how to configure it). In our example, let's define two goals:
 \begin{itemize}
-  \item \texttt{all}, qui commande la construction de l'exécutable (celui qui a été mentionné dans l'instanciation de la classe \texttt{Make}) ;
-  \item \texttt{compile}, qui commande la compilation des sources, sans l'édition des liens (inutilisé pour l'instant).
+  \item \texttt{all}, that control the building of the executable (the one that was mentioned in the instantiation of the class \texttt{Make});
+  \item \texttt{compile}, which controls the compilation of sources, without linking (not used for now).
 \end{itemize}
 
 \begin{lstlisting}[language=py]
 make.addGoal ("all", [product], "Building all")
 make.addGoal ("compile", objectList, "Compile C files")
 \end{lstlisting}
-Chaque but est défini par trois arguments :
+Each goal is defined by three arguments:
 \begin{itemize}
-\item son nom, qui sert par la suite pour le désigner ;
-\item la liste des fichiers qu'il construit ;
-\item sa description, sous la forme d'une chaîne de caractères.
+\item its name, which is later used to refer;
+\item the list of files it builds;
+\item its description as a character string.
 \end{itemize}
 
-~\\À titre de vérification, nous pouvons afficher la liste des buts.
+~\\As a check, we can print a list of goals.
 \begin{lstlisting}[language=py]
 make.printGoals ()
 \end{lstlisting}
 
-On obtient :
+We get:
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -411,25 +414,25 @@ On obtient :
 \textcolor{blue}{\bf{-}{-}{-} End of print goal {-}{-}{-}}
 \end{mdframed}
 
-~\\Enfin, nous allons ordonner la construction du but qui a été désigné lors de l'instanciation de la classe \texttt{Make}, c'est-à-dire le but \texttt{all} (la construction du but \texttt{compile} est présenté plus loin).
+~\\Finally, we will launch the construction of the goal that has been given when instantiating the class \texttt{Make}, that is to say, the aim \texttt{all} (the construction of goal \texttt{compile} is presented below).
 
 \begin{lstlisting}[language=py]
 make.runGoal (0, False)
 \end{lstlisting}
 
 
-Cet appel contient deux arguments :
+This call contains two arguments:
 \begin{itemize}
-\item une valeur entière qui précise combien de règles peuvent être exécutées en parallèle ;
+\item an integer value that specifies how many rules can be executed in parallel;
   \begin{itemize}
-  \item une valeur strictement positive définit le nombre de règles qui peuvent être exécutées en parallèle ; en particulier, la valeur $1$ impose une exécution séquentielle des règles ;
-  \item la valeur $0$ indique au makefile de prendre le nombre de processeurs de la machine sur laquelle tourne le script ;
-  \item la valeur strictement négative indique au makefile de prendre le nombre de processeurs de la machine sur laquelle tourne le script, auquel on ajoute l'opposé de la valeur ; par exemple, $-2$ sur un quadri-cœur définit l'exécution de $4-(-2)=6$ règles en parallèle ;
+  \item a positive value defines the number of rules that can be executed in parallel; in particular, the value $1$ requires a sequential execution rules;
+  \item the value $0$ tells the Makefile to take the number of processors on the machine where the script runs;
+  \item a strictly negative value indicates the Makefile to take the number processors on the machine where the script runs, to which is added the opposite of the value; for example, $-2$ on a quad-core defines the execution of $4-(-2) = 6$ rules in parallel;
   \end{itemize}
-\item une valeur booléenne qui indique si la commande relative à chaque règle doit être affichée ou non ; le titre de chaque règle est toujours affiché.
+\item a Boolean value that indicates whether the command regarding each rule should be displayed or not; Title of each rule is always displayed.
 \end{itemize}
 
-L'exécution du script affiche  (noter la création du répertoire \texttt{objects}) :
+The script displays (note the creation of the directory \texttt{objects})
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -439,9 +442,9 @@ $[$~66\%]~\textcolor{blue}{\bf Compiling myRoutine.c}\\
 $[$100\%]~\textcolor{blue}{\bf Linking myRoutine}
 \end{mdframed}
 
-{\bf Nouveau dans la version 2.3.}\label{affichagePourcentage} Le pourcentage qui est affiché représente le pourcentage de commandes réalisées lorsque la commande citée sur la même ligne sera terminée. Si $N$ commandes doivent être executées, pour la $i$\up{e}  commande ($1 \leqslant i \leqslant N$) la valeur affichée est $100 \times i / N$. Aussi, la dernière commande est toujours précédée de « \texttt{[100\%]} ».
+{\bf New in version 2.3.}\label{affichagePourcentage} The percentage that is displayed represents the percentage of completed commands when the command mentioned on the same line will be completed. If $N$ commands must be executed, for command $i$ ($1 \leqslant i \leqslant N$ ) the displayed value is $100 \times i / N$. Also, the last command is always preceded by "\ texttt {[100 \%]}".
 
-Si on ne veut pas afficher cette information, il suffit d'appeller la méthode \texttt{doNotShowProgressString} de la classe \texttt{Make} avant d'appeler \texttt{runGoal} :
+If we do not want to display this information, simply call the method \texttt{doNotShowProgressString}  of class \texttt{Make} before calling \texttt{runGoal}:
 
 \begin{lstlisting}[language=py]
 make.runGoal (0, False)
@@ -449,10 +452,7 @@ make.doNotShowProgressString ()
 \end{lstlisting}
 
 
-
-
-
-Si on relance aussitôt le script, le makefile examine les dépendances et signale qu'il n'y a rien à construire :
+If we relaunch immediately the script, the makefile examines the dependencies and reports that there is nothing to build:
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -461,7 +461,7 @@ Si on relance aussitôt le script, le makefile examine les dépendances et signa
 
 
 
-~\\Appeler \texttt{runGoal} avec le dernier argument à \texttt{True} permet d'afficher les commandes qui exécutées :
+~\\Calling \texttt{runGoal} with the last argument to \texttt{True} displays the commands that are executed:
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -475,38 +475,37 @@ $[$100\%]~\textcolor{blue}{\bf Linking myRoutine}\\
 gcc objects/main.c.o objects/myRoutine.c.o -o myRoutine
 \end{mdframed}
 
-~\\Si une erreur est détectée, par exemple si l'exécution d'une règle échoue par suite d'une erreur de compilation, l'exécution de \texttt{ruleGoal} attend la fin de toutes les exécutions parallèles pour terminer. Pour afficher les erreurs et abandonner l'exécution du script en retournant un code d'erreur, on peut appeler :
+~\\If an error is detected, such as when executing a rule that fails because of a compilation error, the execution of \texttt{runGoal}  waits for all parallel executions to finish. To view errors and drop the script by returning an error code, you can call:
 \begin{lstlisting}[language=py]
 make.printErrorCountAndExitOnError ()
 \end{lstlisting}
-L'appel de cette méthode n'a aucun effet si il n'y a pas d'erreur.
+Calling this method has no effect if there is no error.
 
-\section{Dépendance des fichiers d'en-tête}
+\section{Dependencies on the header files}
 
+In previous writings, we had not taken into account the dependencies on the header files for compiling C sources. In the example, these dependencies are very simple, there is only one user header file: \texttt{myRoutine.h}. One might add that file in a dependency list defined by \texttt{rule.mDependences}.
 
-Dans les écritures précédentes, nous n'avions pas pris en compte les dépendances envers les fichiers d'en-tête pour la compilation des sources C. Dans l'exemple, ces dépendances sont très simples, il n'y a qu'un seul fichier d'en-tête utilisateur : \texttt{myRoutine.h}. On pourrait ajouter ce fichier dans la liste de dépendances définie par \texttt{rule.mDependences}.
+But in a real case, this requires to maintain yourself the list of dependencies for each source file. Or, depending on the evolution of the program, this list can change: the header files may be unnecessary, others can be forgotten. It is much easier and safer to entrust this task to GCC and to the Python makefile.
 
-Mais dans un cas réel, cela impose de maintenir soi-même la liste des dépendances de chaque fichier source. Or, en fonction de l'évolution du programme, cette liste peut évoluer : des fichiers d'en-tête peuvent s'avérer inutiles, d'autres peuvent être oubliés. Il est donc beaucoup plus simple et plus sûr de confier cette tâche à GCC et au makefile Python.
+Automatically maintaining dependencies on header files is done in three steps.
 
-Maintenir automatiquement les dépendances envers les fichiers d'en-tête s'effectue en trois étapes.
-
-D'abord nommer le fichier de fichier de dépendance : on choisit le nom du fichier objet, auquel on ajoute l'extension \texttt{dep}. Ce fichier sera placé dans le répertoire \texttt{objects}.
+First choose a name for the dependency file by selecting the name of the object file, to which is added the \texttt{dep}. This file will be placed in the \texttt{objects} directory.
 \begin{lstlisting}[language=py]
   depObject = object + ".dep"
 \end{lstlisting}
 
-Ensuite, indiquer à GCC de le construire ; on ajoute les options de compilations suivantes :
+Then tell GCC to build it; We add the following compilation options:
 \begin{lstlisting}[language=py]
   rule.mCommand += ["-MD", "-MP", "-MF", depObject]
 \end{lstlisting}
 
-Enfin, on ajoute à la règle la dépendance en ce fichier (il faut placer l'instance de la classe \texttt{Make} en second argument) :
+Finally, we add to the rule the dependency to this file (you must place the instance of the class \texttt{Make} as second argument):
 \begin{lstlisting}[language=py]
   rule.enterSecondaryDependanceFile (depObject, make)
 \end{lstlisting}
 
 
-~\\{\bf Récapitulation.} Les règles de compilation des sources C deviennent donc :
+~\\{\bf Summary.} The rules for compiling C sources thus become:
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -524,26 +523,22 @@ for source in sourceList:
   make.addRule (rule)
 \end{lstlisting}
 
-Maintenant, toute modification d'un fichier d'en-tête provoquera la compilation des fichiers sources qui l'inclut directement ou indirectement. C'est une dépendance dite \emph{secondaire} car l'absence du fichier n'empêche pas l'exécution de la règle. A contrario, l'absence du fichier source entraîne une erreur, car il n'y a aucun moyen de le construire.
+Now, any modification of a header file will cause the compilation of the source files that directly or indirectly include it. This is called a \emph{secondary} dependency because the absence of the file does not prevent the execution of the rule. Conversely, the absence of the source file causes an error, because there is no way to build it.
 
-L'exécution de la méthode \texttt{enterSecondaryDependanceFile} peut prendre un temps important, puisque la date de modification de tous les fichiers cités dans le fichier \texttt{depObject} est vérifiée. Toutefois, si le but \texttt{clean} est invoqué, cette interrogation n'est pas réalisée car inutile : la durée d'exécution de la méthode est alors négligeable.
-
-
+The execution of the \texttt{enterSecondaryDependanceFile} method can take a long time, since the date of modification of all files listed in the \texttt{depObject} file is checked. However, if the goal \texttt{clean} is invoked, this checking is not done because it is unnecessary: the execution time of the method is then negligible.
 
 
+\section{Priority between rules}
 
-
-\section{Priorité entre les règles}
-
-Par défaut, les règles qui sont prêtes à être exécutées le sont dans leur ordre d'ajout par la méthode \texttt{addRule}. Ainsi, dans notre exemple, on a définit la liste des fichiers sources par :
+By default, the rules that are ready to be executed are in the order they were added by the \texttt{addRule}. Thus, in our example, we defined the list of source files:
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 \end{lstlisting}
-Si on exécute les règles séquentiellement (appel de \texttt{runGoal} avec le deuxième argument égal à $1$), \texttt{main.c} sera toujours compilé avant \texttt{myRoutine.c}.
+If we execute the rules sequentially (call \texttt{runGoal} with the second argument equal to $1$), \texttt{main.c} will be always compiled before \texttt{myRoutine.c}.
 
-On peut changer cet ordre en affectant une priorité à une règle : il suffit de changer la valeur du champ entier \texttt{mPriority} de la règle. Par défaut, ce champ est à zéro. On peut affecter une valeur positive, négative ou nulle, du moment qu'elle est entière. Plus ce champ a une valeur importante, plus la règle est prioritaire. À priorité égale, c'est l'ordre d'insertion des règles (par la méthode \texttt{addRule}) qui définit l'ordre : la première insérée sera exécutée d'abord.
+This order can be changed by assigning a priority to a rule: just change the value of the integer field \texttt{mPriority}  of the rule. By default, this field is set to zero. You can assign a positive, negative or zero value, as long as it is an integer. The more this field has higher value, the more the rule is of high priority. At equal priority the order of insertion of the rule (the \ texttt {} addRule) defines the order: the first rule inserted will be executed first.
 
-Par exemple, on peut demander à compiler les fichiers dans l'ordre décroissant de leur taille. Pour cela on écrira (juste avant l'appel de \texttt{addRule}) :
+For example, to compile the files in descending order of size, we write (just before the call to \texttt{addRule}):
 \begin{lstlisting}[language=py]
   rule.mPriority = os.path.getsize (scriptDir + "/" + source)
 \end{lstlisting}
@@ -553,12 +548,11 @@ Par exemple, on peut demander à compiler les fichiers dans l'ordre décroissant
 
 
 
+\section{Taking into account several goals}
 
-\section{Prise en compte de plusieurs buts}
+We defined the goal \texttt{compile}, but without having called it so far. We'll see how we can write a new Python script that will call this goal.
 
-Nous avons défini le but \texttt{compile}, mais l'avoir appelé jusqu'à présent. Nous allons voir comment nous pouvons écrire un nouveau script Python qui va appeler ce but.
-
-D'abord, nous modifions le début du script \texttt{build.py} de la façon suivante :
+First, we modify the beginning of the script \texttt{build.py}  as follows:
 \begin{lstlisting}[language=py]
 #--- Get goal as first argument
 goal = "all"
@@ -572,52 +566,52 @@ if len (sys.argv) > 2 :
 make = makefile.Make (goal, maxParallelJobs == 1)
 \end{lstlisting}
 
-{\bf Note.}\label{logUtilityToolPath2} À partir de la version 2.2, \texttt{makefile.Make} présente un second argument booléen optionnel.  Si il est vrai, l'appel de chaque commande affiche le chemin complet de l'utilitaire appelé. Par défaut, cet argument optionnel est faux. En plaçant \texttt{maxParallelJobs == 1} comme second argument, on affiche ce chemin si la construction des buts est réalisée séquentiellement, sans parallélisme.
+{\bf Note.}\label{logUtilityToolPath2} From version 2.2, \texttt{makefile.Make}  has an optional second Boolean argument. If it is true, calling each command displays the full path of the utility called. By default, this optional argument is false. By placing \texttt{1 == maxParallelJobs} as the second argument, it displays this path if the construction of the goals is performed sequentially, without parallelism.
 
-Ensuite, nous modifions la fin du script \texttt{build.py} de la façon suivante :
+Then we modify the end of the script \texttt{build.py}  as follows:
 \begin{lstlisting}[language=py]
 make.runGoal (maxParallelJobs, maxParallelJobs == 1)
 \end{lstlisting}
 
-Ces modifications permettent d'appeler ce script avec différents arguments, ce qui permet de préciser le but et le parallélisme.
+These changes allow to call this script with different arguments, allowing to set the goal and the parallelism.
 
-~\\Par exemple, le script \texttt{compile.py}, qui effectue uniquement la compilation, s'écrit :
-\lstinputlisting[language=py]{../compile.py}
-
-
-~\\Autre exemple : le script \texttt{verbose-build.py} effectue une compilation fichier par fichier, ce qui clarifie l'affichage des erreurs, en effet, la compilation parallèle peut provoquer l'affichage entrelacé des messages d'erreurs, les rendant difficilement compréhensibles.
-\lstinputlisting[language=py]{../verbose-build.py}
+~\\For example, the script \texttt{compile.py} , which performs only a compilation is written as :
+\lstinputlisting[language=py]{../../compile.py}
 
 
+~\\Another example is the script \texttt{verbose-build.py}  which performs a compilation file by file. It clarifies the error display, in fact, parallel compilation may cause interlaced display error messages, making them difficult to understand.
+\lstinputlisting[language=py]{../../verbose-build.py}
 
 
 
 
 
-\section{Post commandes}
 
-Il est possible d'ajouter à une règle des \emph{post commandes} qui sont exécutées les unes après les autres à la suite l'exécution de la commande associée. Un exemple typique est l'application de l'utilitaire \texttt{strip} sur l'exécutable produit par le linker.
 
-On ne peut pas écrire une règle ordinaire, car le fichier de dépendance est le même que le fichier cible.
+\section{Post commands}
 
-~\\Pour définir une \emph{post commande}, on commance par instancier un nouvel objet de type \texttt{PostCommand} :
+It is possible to add a rule of \emph{post commands} that are executed one after the other after the execution of the associated command. A typical example is the application of the utility \texttt{strip} the executable produced by the linker.
+
+We can not write a normal rule, because the dependency file is the same as the target file.
+
+~\\To define a \emph{post command}, we first instantiate a new object of type \texttt{PostCommand}:
 \begin{lstlisting}[language=py]
 postCommand = makefile.PostCommand ("Stripping " + product)
 \end{lstlisting}
-En argument, figure le titre qui sera affiché lors de l'exécution de la post commande.
+The argument shall contain the title that will be displayed during the execution of the post command.
 
-~\\On ajoute ensuite la commande qui doit être exécutée :
+~\\Is then added a command to be executed:
 \begin{lstlisting}[language=py]
 postCommand.mCommand += ["strip", "-A", "-n", "-r", "-u", product]
 \end{lstlisting}
 
-~\\Enfin, on ajoute la \emph{post commande} à la liste des post commandes de la règle :
+~\\Finally, add the \emph{post command} to the list of post commands for the rule:
 \begin{lstlisting}[language=py]
 rule.mPostCommands.append (postCommand)
 \end{lstlisting}
 
 
-~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+~\\{\bf Summary.} The rule defines the linking becomes:
 \begin{lstlisting}[language=py]
 product = "myRoutine"
 rule = makefile.Rule ([product], "Linking " + product) # Release 2
@@ -631,7 +625,7 @@ rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 \end{lstlisting}
 
-L'exécution du script affiche maintenant:
+The script now displays:
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \tt\footnotesize
@@ -648,17 +642,18 @@ $[$100\%]~\textcolor{blue}{\bf Linking myRoutine}\\
 
 
 
-\section{Suppression des cibles en cas d'erreur}
+\section{Deleting targets on error}
 
-En cas d'erreur d'exécution d'une commande (par exemple due à une erreur de compilation), le fichier exécutable, si il existe, n'est pas supprimé : on a alors un exécutable qui ne correspond pas à l'état de compilation du programme.
+If an error occurs when executing a command (eg due to a compiler error), the executable file, if it exists, is not removed: then we have an executable that does not match the state of the program compilation..
 
-Il est très simple d'ordonner la suppression de l'exécutable lors d'une erreur d'exécution d'une commande. Il suffit de mettre l'attribut \texttt{mDeleteTargetOnError} de la règle qui définit l'édition de liens à \texttt{True} :
+It's easy to enforce the deletion of the executable during a command execution error. Just put the attribute \texttt{mDeleteTargetOnError} of the rule that controls the linking to \texttt{True}:
+
 \begin{lstlisting}[language=py]
 rule.mDeleteTargetOnError = True
 \end{lstlisting}
-Cette technique peut être utilisée pour toute cible.
+This technique can be used for any target.
 
-~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+~\\{\bf Summary.} The rule that defines the linking becomes:
 \begin{lstlisting}[language=py]
 product = "myRoutine"
 rule = makefile.Rule ([product], "Linking " + product)  # Release 2
@@ -679,24 +674,24 @@ make.addRule (rule)
 
 
 
-\section{Le but \texttt{clean}}
+\section{The goal \texttt{clean}}
 
-Par défaut, le but \texttt{clean} est défini mais n'a aucun effet. Il est facile d'ajouter la suppression de fichiers et de répertoires lorsque le but \texttt{clean} est exécuté.
+By default, the goal \texttt{clean} is set but has no effect. It's easy to add deletion of files and directories when the goal \texttt{clean} is executed.
 
-Dans notre exemple exemple, nous voulons que l'exécution du but \texttt{clean} supprime :
+In our example, we want the execution of goal \texttt{clean} removes :
 \begin{itemize}
-  \item le fichier exécutable ;
-  \item le répertoire contenant les fichiers objets engendrés.
+  \item the executable file ;
+  \item the directory containing the generated object files.
 \end{itemize}
 
-~\\Pour supprimer le fichier exécutable lors de l'exécution du but \texttt{clean}, il suffit d'ajouter à la règle définissant l'édition des liens :
+~\\To remove the executable when executing the goal \texttt{clean}, simply add the rule defining the linking:
 
 \begin{lstlisting}[language=py]
 rule.deleteTargetFileOnClean ()
 \end{lstlisting}
 
 
-~\\{\bf Récapitulation.} La règle qui définit l'édition de liens devient donc :
+~\\{\bf Summary.} The rule that defines the linking becomes :
 \begin{lstlisting}[language=py]
 product = "myRoutine"
 rule = makefile.Rule ([product], "Linking " + product)  # Release 2
@@ -713,13 +708,13 @@ make.addRule (rule)
 \end{lstlisting}
 
 
-~\\Pour supprimer le répertoire \texttt{objects} lors de l'exécution du but \texttt{clean}, il suffit d'ajouter à la règle définissant la compilation des sources C :
+~\\To remove the \texttt{objects} directory when executing the goal \texttt{clean}, simply add the rule defining the compilation of C sources:
 
 \begin{lstlisting}[language=py]
   rule.deleteTargetDirectoryOnClean ()
 \end{lstlisting}
 
-~\\{\bf Récapitulation.} Les règles de compilation des sources C deviennent donc :
+~\\{\bf Summary.} The rules for compiling C sources thus become:
 \begin{lstlisting}[language=py]
 sourceList = ["main.c", "myRoutine.c"]
 objectList = []
@@ -739,31 +734,29 @@ for source in sourceList:
   make.addRule (rule)
 \end{lstlisting}
 
-~\\Il suffit maintenant d'ajouter le script \texttt{clean.py}, qui appelle le but \texttt{clean} :
-\lstinputlisting[language=py]{../clean.py}
+~\\Now just add the script \texttt{clean.py}, calling the goal \texttt{clean}:
+\lstinputlisting[language=py]{../../clean.py}
 
 
-\subsection{Simulation du but \texttt{clean}}\label{simulationButClean}
+\subsection{Simulation of goal \texttt{clean}}\label{simulationButClean}
 
-À partir de la version 2.1, il est possible d'afficher sans les exécuter les commandes lancées par le but \texttt{clean}. Pour cela, il suffit d'appeler la méthode \texttt{simulateClean}.
+From version 2.1, it is possible to display the commands launched by the goal \texttt{clean} without running them. To do this, simply call the method \texttt{simulateClean}.
 
 \begin{lstlisting}[language=py]
   make.simulateClean ()
 \end{lstlisting}
 
-Cette méthode doit être appelée avant l'appel de \texttt{make.runGoal} pour être prise en compte.
+This method must be called before calling \texttt{make.runGoal}  to be taken into account.
 
+\section{Automatic opening of a source file on error}
 
-
-\section{Ouverture automatique d'un source sur erreur}
-
-Il est possible de programmer l'ouverture automatique avec un éditeur externe d'un fichier source quand une erreur se déclenche. Il suffit d'ajouter aux règles concernées la ligne :
+It is possible to program the automatic opening with an external editor of a source file when an error occurs. Just add the rules concerned the line:
 \begin{lstlisting}[language=py]
   rule.mOpenSourceOnError = True
 \end{lstlisting}
 
 
-Nous allons commencer par provoquer une erreur de compilation en insérant un caractère « \S » à la 3\up{e} ligne du fichier \texttt{myRoutine.h} :
+We will begin with causing a compilation error by inserting a character « \S » at the 3rd line of file \texttt{myRoutine.h} :
 \begin{lstlisting}[mathescape,language=C]
 #ifndef MYROUTINE_DEFINED
 #define MYROUTINE_DEFINED
@@ -773,7 +766,7 @@ void myRoutine (void) ;
 #endif
 \end{lstlisting}
 
-Si on relance la compilation, l'erreur est détectée (sur un multi-cœur, les deux compilations ont lieu en parallèle) :
+By running again the compilation, the error is detected (on a multi-heart, the two compilations occur in parallel):
 
 \begin{mdframed}[hidealllines=true,backgroundcolor=lightgray!20]
 \noindent\texttt{\footnotesize
@@ -795,7 +788,8 @@ Wait for job termination...\\
 }
 \end{mdframed}
 
-Quand la propriété \texttt{mOpenSourceOnError} est vraie et en cas d'erreur, le makefile recherche dans le flux de sortie des commandes ayant provoqué une erreur un nom de fichier en début de ligne. Plus précisément, on se base sur la chaîne qui précède la première occurrence du caractère « : ». Cette recherche fournit quatre réponses :
+When the property \texttt{mOpenSourceOnError} is true and if an error occurs, the makefile research a file name at the beginning of line in the output stream of commands that caused an error . Specifically, it is based on the string that precedes the first occurrence of the character ":". This research provides four answers:
+
 \begin{itemize}
 \item \colorbox{lightgray!20}{\tt In file included from main.c}
 \item \colorbox{lightgray!20}{\tt Compiling main.c}
@@ -803,19 +797,19 @@ Quand la propriété \texttt{mOpenSourceOnError} est vraie et en cas d'erreur, l
 \item \colorbox{lightgray!20}{\tt ./myRoutine.h}
 \end{itemize}
 
-Les deux premières réponses ne correspondent pas à un fichier existant, elles sont ignorées. Les deux suivantes provoquent l'ouverture du fichier \texttt{./myRoutine.h} avec un éditeur externe, qui est par défaut :
+The first two answers do not correspond to an existing file, they are ignored. The following two causes the opening of the \texttt{./myRoutine.h}  file with an external editor, which is by default:
 \begin{itemize}
-\item sur Mac : \texttt{TextEdit} ;
-\item sur Linux : \texttt{gEdit}.
+\item on Mac : \texttt{TextEdit} ;
+\item on Linux : \texttt{gEdit}.
 \end{itemize}
 
-Il est facile de changer l'éditeur de texte par défaut, il suffit d'affecter les propriétés suivantes de l'objet \texttt{make} :
+It's easy to change the default text editor, simply assign the following object  \texttt{make} properties :
 \begin{itemize}
-\item pour Mac : \texttt{mMacTextEditor} ;
-\item pour Linux : \texttt{mLinuxTextEditor}.
+\item for Mac : \texttt{mMacTextEditor} ;
+\item for Linux : \texttt{mLinuxTextEditor}.
 \end{itemize}
 
-Par exemple, pour que l'éditeur \texttt{TextWrangler} soit utilisé sur Mac :
+For example, to use the editor \texttt{TextWrangler} on Mac:
 \begin{lstlisting}[language=Py]
 make.mMacTextEditor = "TextWrangler"
 \end{lstlisting}
@@ -824,9 +818,9 @@ make.mMacTextEditor = "TextWrangler"
 
 
 
-\section{Définition de plusieurs cibles à une règle}\label{plusieursCibles}
+\section{Defining multiple targets for a rule}\label{plusieursCibles}
 
-Avec la version 2, plusieurs fichiers cibles peuvent être construis par l'exécution d'une règle. À titre d'exemple, nous allons modifier la règle d'édition de liens pour construire un fichier texte « map » qui contient la carte mémoire de l'exécutable. Trois modifications sont apportées dans le listing ci-dessus (notées \texttt{note1}, \texttt{note2} et \texttt{note3}).
+With version 2, several target files can be build by the execution of a rule. For example, we will modify the rule linker to build a text file "map" that contains the executable memory card. Three changes are made in the listing above (denoted \texttt{note 1}, \texttt{note 2} and \texttt{note3}).
 
 \begin{lstlisting}[language=Py]
 product = "myRoutine"
@@ -845,14 +839,14 @@ rule.mPostCommands.append (postCommand)
 make.addRule (rule)
 \end{lstlisting}
 
-{\bf note1.} Le nouveau fichier cible \texttt{mapFile} est défini ici.
+{\bf note1.} The new target file \texttt{mapFile} is set here.
 
-{\bf note2.} Il est ajouté à la liste des cibles construites par la règle.
+{\bf note2.} It is added to the target list constructed by the rule.
 
-{\bf note3.} La commande est complétée pour construire le nouveau fichier cible.
+{\bf note3.} The command has been completed to build the new target file.
 \\~
 
-En exécutant le but \texttt{all}, les deux fichiers \texttt{myRoutine} et \texttt{myRoutine.map} sont construits. Si on supprime l'un des deux fichiers, exécuter le but \texttt{all} le reconstruit. Si on commente la construction du fichier \texttt{myRoutine.map} (ligne commentée par \texttt{note3}), exécuter le but \texttt{all} affiche une alerte indiquant que le fichier n'a pas été construit.
+By running the goal \texttt{all}, both files \texttt{myRoutine} and \texttt{myRoutine.map} are built. If we remove one of the two files, running the goal \texttt{all} rebuild it. If we comment out the construction of the file \texttt{myRoutine.map}  (line commented by \texttt{note 3}), running the goal \texttt{all} displays an alert indicating that the file has not been built.
 
 
 
@@ -864,11 +858,9 @@ En exécutant le but \texttt{all}, les deux fichiers \texttt{myRoutine} et \text
 
 
 
+\section{The complete script \texttt{build.py}}
 
-\section{Le script complet \texttt{build.py}}
-
-\lstinputlisting[language=py]{../build.py}
-
+\lstinputlisting[language=py]{../../build.py}
 
 
 
@@ -878,66 +870,66 @@ En exécutant le but \texttt{all}, les deux fichiers \texttt{myRoutine} et \text
 
 
 
-\section{Autres fonctions}
 
-\subsection{Impression en couleur}
+\section{Other functions}
 
-Le module \texttt{makefile} définit les fonctions suivantes qui permettent d'effectuer des impressions en couleur :
+\subsection{Color printing}
+
+The module \texttt{M
+makefile} defines the following functions to make color prints:
 \begin{itemize}
   \item \texttt{BLACK()}, \texttt{RED()}, \texttt{GREEN()}, \texttt{YELLOW()}, \texttt{BLUE()}, \texttt{MAGENTA()}, \texttt{CYAN()}, \texttt{WHITE()};
   \item \texttt{BOLD()}, \texttt{BLINK()}, \texttt{UNDERLINE()} ;
-  \item \texttt{ENDC()}, qui remet à zéro les attributs d'impression.
+  \item \texttt{ENDC()}, which resets the print attributes.
 \end{itemize}
-Toutes ces fonctions retournent une chaîne de caractères que l'on peut directement utiliser dans un \texttt{print} :
+All of these functions returns a string that can be directly used in a \texttt{print}:
 \begin{lstlisting}[language=py]
 print makefile.RED () + makefile.BOLD () + "Erreur !" + makefile.ENDC ()
 \end{lstlisting}
 
 
-\subsection{La méthode \texttt{enterError}}
+\subsection{The method \texttt{enterError}}
 
-La méthode \texttt{enterError} de la classe \texttt{Make} permet d'afficher un message d'erreur et d'incrémenter le compteur d'erreurs maintenu par le récepteur. Elle présente un argument chaîne de caractères, qui est imprimé en rouge et en gras sur le terminal.
+The method \texttt{enterError} of class \texttt{Make} will display an error message and increment the error counter maintained by the receiver. It has a string argument characters, which is printed in bold red on the terminal.
 \begin{lstlisting}[language=py]
-make.enterError ("il y a une erreur quelque part !")
+make.enterError ("There is an error somewhere !")
 \end{lstlisting}
-Rappelons qu'un compteur d'erreur non nul inhibe l'exécution des règles lorsque \texttt{runGoal} est invoqué.
+Recall that a non-zero error counter inhibits the execution of rules when \texttt{runGoal}  is invoked.
 
+\subsection{The method \texttt{errorCount}}
 
-\subsection{La méthode \texttt{errorCount}}
-
-La méthode \texttt{errorCount} de la classe \texttt{Make} retourne la valeur courante du compteur d'erreurs maintenu par le récepteur.
+The method \texttt{errorCount} of class \texttt{Make} returns the current value of the error counter maintained by the receiver.
 \begin{lstlisting}[language=py]
 nombre_erreurs = make.errorCount ()
 \end{lstlisting}
 
 
-\subsection{La méthode \texttt{printErrorCount}}
+\subsection{The method \texttt{printErrorCount}}
 
-La méthode \texttt{printErrorCount} de la classe \texttt{Make} imprime la valeur courante du compteur d'erreurs maintenu par le récepteur si celle-ci est non nulle. Si elle est nulle, rien n'est imprimé.
+The method \texttt{printErrorCount}  of class \texttt{Make} prints the current value of the error counter maintained by the receiver if it is not zero. If it is zero, nothing is printed.
 \begin{lstlisting}[language=py]
 make.printErrorCount ()
 \end{lstlisting}
 
 
-\subsection{Recherche d'un fichier dans une arborescence}
+\subsection{Search for a file in a directory tree}
 
-La méthode \texttt{searchFileInDirectories} de la classe \texttt{Make} recherche un fichier dans une liste de répertoires :
+The method \texttt{searchFileInDirectories} of class \texttt{Make} searches a file in a directory list:
 \begin{lstlisting}[language=py]
-chemin = make.searchFileInDirectories (fichier, liste_de_repertoires)
+path = make.searchFileInDirectories (file, list_of_directories)
 \end{lstlisting}
-Où :
+Where :
 \begin{itemize}
-  \item \texttt{fichier} est une chaîne de caractères qui définit le nom du fichier recherché ;
-  \item \texttt{liste\_de\_repertoires} est une liste de chaînes de caractères qui définit la liste des répertoires dans lesquels le fichier sera recherché ;
+  \item \texttt{file} is a character string that defines the name of the desired file ;
+  \item \texttt{list\_of\_directories} is a list of strings that defines the list of directories in which the file will be searched ;
 \end{itemize}
-La fonction retourne :
+the method returns :
 \begin{itemize}
-  \item si \texttt{fichier} est trouvé exactement une fois, le nom du fichier préfixé par le nom du répertoire qui contient le fichier ;
-  \item la chaîne vide si le fichier n'est pas trouvé, ou si il est trouvé plusieurs fois ; un message d'erreur est alors affiché, et le compteur d'erreur maintenu par le récepteur est incrémenté.
+  \item if \texttt{file} is found exactly once, the file name prefixed by the directory name that contains the file ;
+  \item the empty string if the file is not found or if it is found several times; an error message is displayed, and the error count maintained by the receiver is incremented.
 \end{itemize}
 
-Rappelons qu'un compteur d'erreur non nul inhibe l'exécution des règles lorsque \texttt{runGoal} est invoqué.
-
+Recall that a non-zero error counter inhibits the execution of rules when \texttt{runGoal}  is invoked.
 
 %-----------------------------------------------------------------------------------------------------------------------*
 %   F I N    D U    D O C U M E N T                                                                                     *
