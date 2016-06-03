@@ -332,7 +332,7 @@ class Job:
     postCommand = self.mPostCommands [0]
     self.mCommand = postCommand.mCommand
     displayLock.acquire ()
-    print (BOLD_BLUE () + postCommand.mTitle + ENDC ())
+    print (BOLD_BLUE () + "       " + postCommand.mTitle + ENDC ())
     if showCommand:
       cmdAsString = ""
       for s in self.mCommand:
